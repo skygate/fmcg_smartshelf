@@ -1,7 +1,7 @@
-import argparse
 import os
 from typing import List, Tuple, Dict
 
+import PIL
 import cv2
 import numpy as np
 import torch
@@ -17,7 +17,6 @@ from config import (
     RESOLUTION,
     MEAN,
     STD,
-    DATA_PATH,
 )
 
 
@@ -26,13 +25,21 @@ class Runner:
     Class that runs the system sequence steps
     """
 
-    def __init__(self, image_path: str) -> None:
-        self.image_path = image_path
-        self.classifier = Classifier(image_path)
-        self.drawer = Drawer(image_path)
-        self.detector = Detector(image_path)
+    def __init__(self, image: PIL.Image) -> None:
+        self.pil_image = image
+        self.opencv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+        self.classifier = Classifier(self.pil_image)
+        self.drawer = Drawer(self.opencv_image)
+        self.detector = Detector(self.opencv_image)
 
-    def run(self) -> None:
+    def show_detections(self) -> None:
+        _, _, image = self.run()
+
+        cv2.imshow("Image", image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+    def run(self) -> Tuple[str, str, np.ndarray]:
         object_types = ["plate", "flat"]
         object_classification_result = self.classifier.make_classification(
             "object_classifier.pth", object_types
@@ -52,9 +59,11 @@ class Runner:
             bboxes = self.detector.get_bboxes()
             self.drawer.draw_bboxes(bboxes, defect_types)
 
-        cv2.imshow("Image", self.drawer.image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        return (
+            object_classification_result,
+            state_classification_result,
+            self.drawer.image,
+        )
 
 
 class Classifier:
@@ -62,16 +71,16 @@ class Classifier:
     Class that makes classification of the image using trained model
     """
 
-    def __init__(self, image_path: str) -> None:
+    def __init__(self, image: PIL.Image) -> None:
         self.device: torch.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu"
         )
-        self.image_path = image_path
+        self.image = image
         self.image_tensor = self._convert_image_to_tensor()
 
     def _convert_image_to_tensor(self) -> torch.Tensor:
         preprocess = self._preprocess_image()
-        image_tensor = preprocess(Image.open(self.image_path)).float()
+        image_tensor = preprocess(self.image).float()
         return image_tensor.unsqueeze_(0)
 
     def _preprocess_image(self) -> transforms.Compose:
@@ -97,9 +106,8 @@ class Detector:
     Class that detects defects on image using trained model
     """
 
-    def __init__(self, image_path: str) -> None:
-        self.image = cv2.imread(image_path)
-        self.image = cv2.resize(self.image, (1920, 1080))
+    def __init__(self, image: np.ndarray) -> None:
+        self.image = cv2.resize(image, (1920, 1080))
         self.image_width = self.image.shape[1]
         self.image_height = self.image.shape[0]
         self.model = cv2.dnn.readNet(DETECTOR_CFG, DETECTOR_WEIGHTS)
@@ -162,9 +170,8 @@ class Drawer:
     Class that draws on the given image
     """
 
-    def __init__(self, image_path: str) -> None:
-        self.image = cv2.imread(image_path)
-        self.image = cv2.resize(self.image, (1920, 1080))
+    def __init__(self, image: np.ndarray) -> None:
+        self.image = cv2.resize(image, (1920, 1080))
 
     def put_text(self, object_type: str, state: str) -> None:
         cv2.putText(
@@ -204,20 +211,3 @@ class Drawer:
                 color,
                 2,
             )
-
-
-def main(args: argparse.Namespace) -> None:
-    image_path = os.path.join(DATA_PATH, args.name)
-    runner = Runner(image_path)
-    runner.run()
-
-
-def set_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Air motor Prove of Concept")
-    parser.add_argument("-n", "--name", required=True, help="Name of the image")
-    args = parser.parse_args()
-    return args
-
-
-if __name__ == "__main__":
-    main(set_args())
