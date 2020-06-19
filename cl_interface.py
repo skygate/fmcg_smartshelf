@@ -1,13 +1,17 @@
 import argparse
 import os
 
+from PIL import Image
+
 from config import DATA_PATH
 from scripts.models_runner import Runner
 
 
 def main(args: argparse.Namespace) -> None:
     image_path = os.path.join(DATA_PATH, args.name)
-    runner = Runner(image_path)
+    image = Image.open(image_path)
+
+    runner = Runner(image)
     runner.run()
 
 
