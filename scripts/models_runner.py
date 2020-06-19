@@ -1,4 +1,3 @@
-import argparse
 import os
 from typing import List, Tuple, Dict
 
@@ -17,7 +16,6 @@ from config import (
     RESOLUTION,
     MEAN,
     STD,
-    DATA_PATH,
 )
 
 
@@ -204,20 +202,3 @@ class Drawer:
                 color,
                 2,
             )
-
-
-def main(args: argparse.Namespace) -> None:
-    image_path = os.path.join(DATA_PATH, args.name)
-    runner = Runner(image_path)
-    runner.run()
-
-
-def set_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Air motor Prove of Concept")
-    parser.add_argument("-n", "--name", required=True, help="Name of the image")
-    args = parser.parse_args()
-    return args
-
-
-if __name__ == "__main__":
-    main(set_args())
