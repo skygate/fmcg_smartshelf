@@ -12,7 +12,7 @@ def main(args: argparse.Namespace) -> None:
     image = Image.open(image_path)
 
     runner = Runner(image)
-    runner.run()
+    runner.show_detections()
 
 
 def set_args() -> argparse.Namespace:

@@ -32,6 +32,13 @@ class Runner:
         self.drawer = Drawer(self.opencv_image)
         self.detector = Detector(self.opencv_image)
 
+    def show_detections(self) -> None:
+        _, _, image = self.run()
+
+        cv2.imshow("Image", image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
     def run(self) -> Tuple[str, str, np.ndarray]:
         object_types = ["plate", "flat"]
         object_classification_result = self.classifier.make_classification(
