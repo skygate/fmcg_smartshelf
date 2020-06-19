@@ -5,6 +5,7 @@ _CURRENT_DIR = Path.cwd()
 
 DATA_PATH = _CURRENT_DIR / "data"
 MODELS_PATH = _CURRENT_DIR / "models"
+UPLOAD_FOLDER = _CURRENT_DIR / "uploads"
 
 CLASSIFIERS_PATH = MODELS_PATH / "classifiers"
 _DETECTOR_PATH = MODELS_PATH / "detector"
