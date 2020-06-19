@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 To start processing the image, type in your terminal
 ```
-python main.py -n [IMAGE_FILENAME]
+python cl_interface.py -n [IMAGE_FILENAME]
 ```
 
 The image has to be in the data folder.
