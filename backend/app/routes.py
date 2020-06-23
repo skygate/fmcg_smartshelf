@@ -36,7 +36,7 @@ def run():
     return jsonify({"type": object_type, "state": state, "defects": defects, "filename": file.filename})
 
 
-@api.route("/get_detections", methods=["GET", "POST"])
+@api.route("/get_detections", methods=["POST"])
 def get_detections():
     filename = request.form.get(FILENAME_KEY)
     if not filename:
