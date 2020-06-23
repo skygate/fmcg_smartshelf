@@ -5,7 +5,7 @@ import cv2
 from PIL import Image
 from flask import request, jsonify, Blueprint, send_from_directory
 
-from config import FILE_KEY, UPLOAD_FOLDER, UPLOAD_FILE_NAME_PATH
+from config import FILE_KEY, UPLOAD_FOLDER, UPLOAD_FILE_NAME_PATH, FILENAME_KEY
 from scripts.models_runner import Runner
 
 api = Blueprint("api", __name__)
@@ -33,17 +33,13 @@ def run():
     upload_path = os.path.join(UPLOAD_FOLDER, file.filename)
     cv2.imwrite(upload_path, image_with_bboxes)
 
-    with open(UPLOAD_FILE_NAME_PATH, "w+") as f:
-        writer = csv.writer(f)
-        writer.writerow([file.filename])
-
-    return jsonify({"type": object_type, "state": state, "defects": defects})
+    return jsonify({"type": object_type, "state": state, "defects": defects, "filename": file.filename})
 
 
-@api.route("/get_detections", methods=["GET"])
+@api.route("/get_detections", methods=["POST"])
 def get_detections():
-    with open(UPLOAD_FILE_NAME_PATH, "r") as f:
-        reader = csv.reader(f)
-        file_name = next(reader)[0]
+    filename = request.form.get(FILENAME_KEY)
+    if not filename:
+        return jsonify({"status": "File name can't be empty"})
 
-    return send_from_directory(UPLOAD_FOLDER, file_name)
+    return send_from_directory(UPLOAD_FOLDER, filename)
