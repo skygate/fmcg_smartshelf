@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
 
 import PIL
 import cv2
@@ -33,7 +33,7 @@ class Runner:
         self.detector = Detector(self.opencv_image)
 
     def show_detections(self) -> None:
-        _, _, image = self.run()
+        _, _, image, _ = self.run()
 
         cv2.imshow("Image", image)
         cv2.waitKey(0)
@@ -55,14 +55,16 @@ class Runner:
         self.drawer.put_text(object_classification_result, state_classification_result)
 
         defect_types = ["scratches", "recess"]
+        defects = None
         if state_classification_result == "defective":
-            bboxes = self.detector.get_bboxes()
-            self.drawer.draw_bboxes(bboxes, defect_types)
+            bboxes, defects = self.detector.get_bboxes(defect_types)
+            self.drawer.draw_bboxes(bboxes)
 
         return (
             object_classification_result,
             state_classification_result,
             self.drawer.image,
+            defects,
         )
 
 
@@ -115,15 +117,20 @@ class Detector:
         self.boxes = None
         self.classes = None
 
-    def get_bboxes(self) -> Dict[Tuple[int, int, int, int], int]:
+    def get_bboxes(
+        self, defect_types: List[str]
+    ) -> Tuple[Dict[Tuple[int, int, int, int], Dict[str, int]], Dict[str, str]]:
         indices = self._remove_high_overlapping_boxes()
+        print(indices)
         bboxes = {}
-        for idx in indices:
+        defects = {}
+        for counter, idx in enumerate(indices):
             idx = idx[0]
             x, y, w, h = self.boxes[idx]
             box = round(x), round(y), round(w), round(h)
-            bboxes[box] = self.classes[idx]
-        return bboxes
+            bboxes[box] = {"id": counter + 1, "class": self.classes[idx]}
+            defects[str(counter + 1)] = defect_types[self.classes[idx]]
+        return bboxes, defects
 
     def _remove_high_overlapping_boxes(self) -> np.ndarray:
         self._get_detections()
@@ -195,17 +202,17 @@ class Drawer:
         )
 
     def draw_bboxes(
-        self, bboxes: Dict[Tuple[int, int, int, int], int], classes: List[str]
+        self, bboxes: Dict[Tuple[int, int, int, int], Dict[str, int]]
     ) -> None:
         for bbox, label in bboxes.items():
             p1 = (bbox[0], bbox[1])
             p2 = (bbox[0] + bbox[2], bbox[1] + bbox[3])
-            color = (255, 255, 0) if label == 0 else (255, 255, 255)
+            color = (255, 255, 0) if label["class"] == 0 else (255, 255, 255)
             cv2.rectangle(self.image, p1, p2, color, 2)
             cv2.putText(
                 self.image,
-                classes[label],
-                (bbox[0], bbox[1] - 10),
+                str(label["id"]),
+                (int((2 * bbox[0] + bbox[2]) / 2) - 5, bbox[1] - 10),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.5,
                 color,
