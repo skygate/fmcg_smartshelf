@@ -2,9 +2,9 @@
 __pycache__/
 venv/
 
-*.csv
 *.jpg
 *.pth
 *.json
 *.cfg
 *.weights
+
