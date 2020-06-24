@@ -172,7 +172,14 @@ export const ListRowsWrapper = styled.div`
 
 export const GifWrapper = styled(ResultImage)`
   display: ${({ isActive }) => isActive && "none"};
-  height: 26.5rem;
-  width: 26.5rem;
+  height: 33.75rem;
+  width: 33.75rem;
   margin: 0 auto;
+`;
+
+export const LoaderWrapper = styled.div`
+  margin: 1rem;
+  width: 60rem;
+  height: 33.75rem;
+  padding: 1em 0 0;
 `;

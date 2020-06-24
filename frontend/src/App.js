@@ -91,7 +91,9 @@ function App() {
       return (
         <S.ColumnsWrapper>
           {hideGif ? (
-            <S.GifWrapper src={"loader.gif"} isActive={!hideGif} />
+            <S.LoaderWrapper>
+              <S.GifWrapper src={"loader.gif"} isActive={!hideGif} />
+            </S.LoaderWrapper>
           ) : (
             <S.ResultImage src={imagePreviewState} />
           )}
