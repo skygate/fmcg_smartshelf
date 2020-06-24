@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple, Dict, Union
+from typing import List, Tuple, Dict
 
 import PIL
 import cv2
@@ -121,7 +121,6 @@ class Detector:
         self, defect_types: List[str]
     ) -> Tuple[Dict[Tuple[int, int, int, int], Dict[str, int]], Dict[str, str]]:
         indices = self._remove_high_overlapping_boxes()
-        print(indices)
         bboxes = {}
         defects = {}
         for counter, idx in enumerate(indices):
