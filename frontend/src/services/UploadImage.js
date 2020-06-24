@@ -6,5 +6,9 @@ export const getStatus = (picture) =>
     body: picture,
   }).then((res) => res.json());
 
-export const getPictureWithDamage = () =>
-  fetch(`${url}/get_detections`).then((res) => res.blob());
+export const getPictureWithDamage = (filename) =>
+  fetch(`${url}/get_detections`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(filename),
+  }).then((res) => res.blob());

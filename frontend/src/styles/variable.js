@@ -26,7 +26,7 @@ export const colors = {
   red: "#E90107",
   grey: "#00000029",
   yellow: "#FDB201",
-  green: "#667A3B",
+  green: "#12D00B",
   silver: "#C7C7C7",
   turquoiseBlue: "#61D7ED",
   spray: "#78ECED",

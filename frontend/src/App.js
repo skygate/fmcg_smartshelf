@@ -6,22 +6,21 @@ import "antd/dist/antd.css";
 import * as S from "./components/MainPage";
 import { getStatus, getPictureWithDamage } from "./services/UploadImage";
 
-function getBase64(file) {
+const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-}
+};
 
 function App() {
   const [imagePreviewState, setImagePreviewState] = useState(null);
   const [dataToSend, setDataToSend] = useState(null);
-  const [status, setStatus] = useState(false);
   const [pictureWithDamage, setPictureWithDamage] = useState(null);
-  const [failureStatus, setFailureStatus] = useState(null);
   const [successStatus, setSuccessStatus] = useState(null);
+  const [failureStatus, setFailureStatus] = useState(null);
 
   const props = {
     name: "file",
@@ -47,7 +46,7 @@ function App() {
       }
     },
   };
-
+  console.log(failureStatus);
   const handleDetection = async () => {
     const data = new FormData();
     data.append("file", dataToSend);
@@ -55,19 +54,59 @@ function App() {
 
     if (response.state === "good") {
       setSuccessStatus(response);
-      setStatus(true);
       return;
     }
     setFailureStatus(response);
-    const picture = await getPictureWithDamage();
+    const body = { filename: response.filename };
+    const picture = await getPictureWithDamage(body);
     const objectURL = URL.createObjectURL(picture);
     setPictureWithDamage(objectURL);
   };
 
   const handleReset = () => {
     setImagePreviewState(null);
-    setStatus(null);
     setPictureWithDamage(null);
+    setFailureStatus(null);
+    setSuccessStatus(null);
+  };
+
+  const renderImage = () => {
+    if (pictureWithDamage) {
+      return (
+        <S.ColumnsWrapper>
+          <S.ImageWithDamage src={pictureWithDamage}></S.ImageWithDamage>
+          <S.ButtonsWrapper>
+            <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
+            <S.DetectButton onClick={handleDetection}>
+              Run detection
+            </S.DetectButton>
+          </S.ButtonsWrapper>
+        </S.ColumnsWrapper>
+      );
+    }
+    if (imagePreviewState) {
+      return (
+        <S.ColumnsWrapper>
+          <S.ResultImage src={imagePreviewState} />
+          <S.ButtonsWrapper>
+            <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
+            <S.DetectButton onClick={handleDetection}>
+              Run detection
+            </S.DetectButton>
+          </S.ButtonsWrapper>
+        </S.ColumnsWrapper>
+      );
+    }
+    return (
+      <S.UploadWrapper>
+        <S.UploadSymbol src="upload.svg" />
+        <S.UploadAndtWrapper {...props}>
+          <Button>
+            <UploadOutlined /> Click to Upload
+          </Button>
+        </S.UploadAndtWrapper>
+      </S.UploadWrapper>
+    );
   };
 
   return (
@@ -78,32 +117,11 @@ function App() {
         </S.TitleWrapper>
 
         <S.MiddleSectionWrapper>
-          <S.SingelCell>
-            {imagePreviewState ? (
-              <>
-                <S.ResultImage src={imagePreviewState} />
-                <S.ButtonsWrapper>
-                  <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
-                  <S.DetectButton onClick={handleDetection}>
-                    Run detection
-                  </S.DetectButton>
-                </S.ButtonsWrapper>
-              </>
-            ) : (
-              <S.UploadWrapper>
-                <S.UploadSymbol src="upload.svg" />
-                <S.UploadAndtWrapper {...props}>
-                  <Button>
-                    <UploadOutlined /> Click to Upload
-                  </Button>
-                </S.UploadAndtWrapper>
-              </S.UploadWrapper>
-            )}
-          </S.SingelCell>
+          <S.SingelCell>{renderImage()}</S.SingelCell>
 
           <S.SingelCell>
             <S.ResultTitle>Result:</S.ResultTitle>
-            {status && (
+            {successStatus && (
               <>
                 <S.ResultStatus>No damage detected</S.ResultStatus>
                 <S.ResultStatus>{`Object: ${successStatus.type}`}</S.ResultStatus>
@@ -111,12 +129,22 @@ function App() {
               </>
             )}
 
-            {pictureWithDamage && (
-              <>
-                <S.ImageWithDamage src={pictureWithDamage}></S.ImageWithDamage>
-                <S.ResultStatus>{`Object: ${failureStatus.type}`}</S.ResultStatus>
-                <S.FailureStatus>{`State: ${failureStatus.state}`}</S.FailureStatus>
-              </>
+            {failureStatus && (
+              <S.RowsWrapper>
+                <div>
+                  <S.ResultStatus>{`Object: ${failureStatus.type}`}</S.ResultStatus>
+                  <S.FailureStatus>{`State: ${failureStatus.state}`}</S.FailureStatus>
+                </div>
+                <S.ListWrapper>
+                  {Object.entries(failureStatus.defects).map(([key, value]) => (
+                    <S.ListRowsWrapper>
+                      <S.ListElement>{key}</S.ListElement>
+                      <S.ListElement>{"-"}</S.ListElement>
+                      <S.ListElement>{value}</S.ListElement>
+                    </S.ListRowsWrapper>
+                  ))}
+                </S.ListWrapper>
+              </S.RowsWrapper>
             )}
           </S.SingelCell>
         </S.MiddleSectionWrapper>
