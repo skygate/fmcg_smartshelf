@@ -31,6 +31,8 @@ export const colors = {
   turquoiseBlue: "#61D7ED",
   spray: "#78ECED",
   silverSand: "#B9C0C0",
+  scratches: "#eba919",
+  recess: "#e061cd",
 };
 
 export const fontSize = {

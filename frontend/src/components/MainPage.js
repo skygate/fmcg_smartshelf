@@ -1,17 +1,13 @@
 import styled from "styled-components";
 import { Upload, Button } from "antd";
 
-import { colors, fontSize, fontWeight, mediaQueries } from "../styles/variable";
+import { colors, fontSize, fontWeight } from "../styles/variable";
 
 export const PageWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   padding-top: 2rem;
-  background-image: linear-gradient(
-    360deg,
-    rgb(97, 215, 237),
-    rgb(120, 236, 237)
-  );
+  background-image: linear-gradient(360deg, rgb(53, 53, 53), rgb(88, 88, 88));
 `;
 
 export const UploadAreaWrapper = styled.div`
@@ -160,6 +156,7 @@ export const RowsWrapper = styled.div`
 export const ListElement = styled.div`
   font-size: ${fontSize.normal};
   margin-right: 0.5rem;
+  color: ${({ isActive }) => (isActive ? colors.recess : colors.scratches)};
 
   :last-child {
     font-weight: ${fontWeight.extraBold};
@@ -176,4 +173,10 @@ export const ListWrapper = styled.div`
 export const ListRowsWrapper = styled.div`
   display: flex;
   margin-left: 2rem;
+`;
+
+export const GifWrapper = styled(ResultImage)`
+  display: ${({ isActive }) => isActive && "none"};
+  height: 26.5rem;
+  width: 26.5rem;
 `;

@@ -21,6 +21,7 @@ function App() {
   const [pictureWithDamage, setPictureWithDamage] = useState(null);
   const [successStatus, setSuccessStatus] = useState(null);
   const [failureStatus, setFailureStatus] = useState(null);
+  const [hideGif, setHideGif] = useState(false);
 
   const props = {
     name: "file",
@@ -46,19 +47,21 @@ function App() {
       }
     },
   };
-  console.log(failureStatus);
+
   const handleDetection = async () => {
+    setHideGif(true);
     const data = new FormData();
     data.append("file", dataToSend);
+    setTimeout(() => {
+      setHideGif(false);
+    }, 2000);
     const response = await getStatus(data);
-
     if (response.state === "good") {
       setSuccessStatus(response);
       return;
     }
     setFailureStatus(response);
-    const body = { filename: response.filename };
-    const picture = await getPictureWithDamage(body);
+    const picture = await getPictureWithDamage({ filename: response.filename });
     const objectURL = URL.createObjectURL(picture);
     setPictureWithDamage(objectURL);
   };
@@ -87,7 +90,11 @@ function App() {
     if (imagePreviewState) {
       return (
         <S.ColumnsWrapper>
-          <S.ResultImage src={imagePreviewState} />
+          {hideGif ? (
+            <S.GifWrapper src={"loader.gif"} isActive={!hideGif} />
+          ) : (
+            <S.ResultImage src={imagePreviewState} />
+          )}
           <S.ButtonsWrapper>
             <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
             <S.DetectButton onClick={handleDetection}>
@@ -137,10 +144,16 @@ function App() {
                 </div>
                 <S.ListWrapper>
                   {Object.entries(failureStatus.defects).map(([key, value]) => (
-                    <S.ListRowsWrapper>
-                      <S.ListElement>{key}</S.ListElement>
-                      <S.ListElement>{"-"}</S.ListElement>
-                      <S.ListElement>{value}</S.ListElement>
+                    <S.ListRowsWrapper key={key}>
+                      <S.ListElement isActive={value === "recess"}>
+                        {key}
+                      </S.ListElement>
+                      <S.ListElement isActive={value === "recess"}>
+                        {"-"}
+                      </S.ListElement>
+                      <S.ListElement isActive={value === "recess"}>
+                        {value}
+                      </S.ListElement>
                     </S.ListRowsWrapper>
                   ))}
                 </S.ListWrapper>
