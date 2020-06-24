@@ -38,7 +38,7 @@ def run():
 
 @api.route("/get_detections", methods=["POST"])
 def get_detections():
-    filename = request.form.get(FILENAME_KEY)
+    filename = request.json.get(FILENAME_KEY)
     if not filename:
         return jsonify({"status": "File name can't be empty"})
 
