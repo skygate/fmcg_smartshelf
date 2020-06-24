@@ -52,7 +52,7 @@ class Runner:
         }
         state_classification_result = models[object_classification_result]
 
-        self.drawer.put_text(object_classification_result, state_classification_result)
+        # self.drawer.put_text(object_classification_result, state_classification_result)
 
         defect_types = ["scratches", "recess"]
         defects = None
@@ -207,14 +207,17 @@ class Drawer:
         for bbox, label in bboxes.items():
             p1 = (bbox[0], bbox[1])
             p2 = (bbox[0] + bbox[2], bbox[1] + bbox[3])
-            color = (255, 255, 0) if label["class"] == 0 else (255, 255, 255)
-            cv2.rectangle(self.image, p1, p2, color, 2)
+            color = (25, 168, 235) if label["class"] == 0 else (205, 97, 224)
+            cv2.rectangle(self.image, p1, p2, color, 3)
             cv2.putText(
                 self.image,
                 str(label["id"]),
-                (int((2 * bbox[0] + bbox[2]) / 2) - 5, bbox[1] - 10),
+                (
+                    int((2 * bbox[0] + bbox[2]) / 2) - 10,
+                    int((2 * bbox[1] + bbox[3]) / 2) + 10,
+                ),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                0.5,
+                1,
                 color,
-                2,
+                3,
             )
