@@ -35,7 +35,7 @@ export const Title = styled.div`
 
 export const MiddleSectionWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `;
 
 export const SingelCell = styled.div`
@@ -46,13 +46,13 @@ export const UploadWrapper = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px dashed ${colors.silverSand};
-  margin: 1rem auto 0;
-  width: 47rem;
-  height: 26.5rem;
+  margin: 1rem;
+  width: 60rem;
+  height: 33.75rem;
 `;
 
 export const UploadSymbol = styled.img`
-  margin: 9rem auto 2rem;
+  margin: 11rem auto 2rem;
   height: 6.25rem;
   width: 6.25rem;
   border-radius: 5px;
@@ -85,31 +85,31 @@ export const UploadInput = styled.input`
 `;
 
 export const ResultTitle = styled.div`
-  margin: 1rem 4rem;
+  margin: 1rem 2rem;
   font-size: ${fontSize.medium};
 `;
 
 export const ResultStatus = styled.div`
   display: flex;
   font-size: ${fontSize.normal};
-  margin: 0 4rem;
+  margin: 0 2rem;
   font-weight: ${fontWeight.semiBold};
 `;
 
 export const ResultImage = styled.img`
   display: block;
-  margin: 1rem auto 0.5rem;
-  width: 47rem;
-  height: 26.5rem;
+  margin: 1rem;
+  width: 60rem;
+  height: 33.75rem;
   background-size: cover;
   padding: 1em 0 0;
 `;
 
 export const ImageWithDamage = styled.img`
   display: block;
-  margin: 1rem auto 0.5rem;
-  width: 47rem;
-  height: 26.5rem;
+  margin: 1rem;
+  width: 60rem;
+  height: 33.75rem;
   background-size: cover;
   padding: 1em 0 0;
 `;
@@ -134,13 +134,15 @@ export const ButtonsWrapper = styled.div`
 
 export const GoodStatus = styled(ResultStatus)`
   color: ${colors.green};
-  margin-left: 4rem;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
 `;
 
 export const FailureStatus = styled(ResultStatus)`
   color: ${colors.red};
   text-transform: uppercase;
-  margin-left: 4rem;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
 `;
 
 export const ColumnsWrapper = styled.div`
@@ -163,13 +165,6 @@ export const ListElement = styled.div`
   }
 `;
 
-export const ListWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  max-height: 5rem;
-`;
-
 export const ListRowsWrapper = styled.div`
   display: flex;
   margin-left: 2rem;
@@ -179,4 +174,5 @@ export const GifWrapper = styled(ResultImage)`
   display: ${({ isActive }) => isActive && "none"};
   height: 26.5rem;
   width: 26.5rem;
+  margin: 0 auto;
 `;

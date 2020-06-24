@@ -124,8 +124,6 @@ function App() {
         </S.TitleWrapper>
 
         <S.MiddleSectionWrapper>
-          <S.SingelCell>{renderImage()}</S.SingelCell>
-
           <S.SingelCell>
             <S.ResultTitle>Result:</S.ResultTitle>
             {successStatus && (
@@ -137,12 +135,12 @@ function App() {
             )}
 
             {failureStatus && (
-              <S.RowsWrapper>
+              <S.ColumnsWrapper>
                 <div>
                   <S.ResultStatus>{`Object: ${failureStatus.type}`}</S.ResultStatus>
                   <S.FailureStatus>{`State: ${failureStatus.state}`}</S.FailureStatus>
                 </div>
-                <S.ListWrapper>
+                <S.ColumnsWrapper>
                   {Object.entries(failureStatus.defects).map(([key, value]) => (
                     <S.ListRowsWrapper key={key}>
                       <S.ListElement isActive={value === "recess"}>
@@ -156,10 +154,11 @@ function App() {
                       </S.ListElement>
                     </S.ListRowsWrapper>
                   ))}
-                </S.ListWrapper>
-              </S.RowsWrapper>
+                </S.ColumnsWrapper>
+              </S.ColumnsWrapper>
             )}
           </S.SingelCell>
+          <S.SingelCell>{renderImage()}</S.SingelCell>
         </S.MiddleSectionWrapper>
       </S.UploadAreaWrapper>
     </S.PageWrapper>
