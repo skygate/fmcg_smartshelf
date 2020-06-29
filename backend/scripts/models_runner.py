@@ -135,10 +135,10 @@ class Detector:
             x, y, w, h = self.boxes[idx]
             bbox = round(x), round(y), round(w), round(h)
             is_critical = self._is_critical(bbox, self.classes[idx])
-            bboxes[bbox] = {"id": counter + 1, "threat level": is_critical}
+            bboxes[bbox] = {"id": counter + 1, "is_critical": is_critical}
             defects[str(counter + 1)] = {
-                "defect type": defect_types[self.classes[idx]],
-                "threat level": is_critical,
+                "defect_type": defect_types[self.classes[idx]],
+                "is_critical": is_critical,
             }
         return bboxes, defects
 
