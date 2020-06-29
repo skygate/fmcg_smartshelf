@@ -187,7 +187,6 @@ class Detector:
             is_critical = True
         else:
             _, __, bbox_width, bbox_height = bbox
-            print(bbox_width * bbox_height)
             if bbox_width * bbox_height > self.criticality_ratio:
                 is_critical = True
         return is_critical
