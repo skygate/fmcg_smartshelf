@@ -227,7 +227,7 @@ class Drawer:
         for bbox, label in bboxes.items():
             p1 = (bbox[0], bbox[1])
             p2 = (bbox[0] + bbox[2], bbox[1] + bbox[3])
-            color = (0, 56, 255) if label["threat level"] else (255, 255, 0)
+            color = (0, 56, 255) if label["is_critical"] else (255, 255, 0)
             cv2.rectangle(self.image, p1, p2, color, 3)
             cv2.putText(
                 self.image,
