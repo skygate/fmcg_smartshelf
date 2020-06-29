@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Optional
 
 import PIL
 import cv2
@@ -39,7 +39,7 @@ class Runner:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def run(self) -> Tuple[str, str, np.ndarray]:
+    def run(self) -> Tuple[str, str, np.ndarray, Optional[Dict[str, str]]]:
         object_types = ["plate", "flat"]
         object_classification_result = self.classifier.make_classification(
             "object_classifier.pth", object_types
