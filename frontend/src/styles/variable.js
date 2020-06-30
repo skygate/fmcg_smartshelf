@@ -33,6 +33,11 @@ export const colors = {
   silverSand: "#B9C0C0",
   scratches: "#eba919",
   recess: "#e061cd",
+  menu: "#333841",
+  tab: "#22B654",
+  statusBackground: "#f0f0f0",
+  detectiveTab: "#ff0000",
+  border: "#adbace",
 };
 
 export const fontSize = {
