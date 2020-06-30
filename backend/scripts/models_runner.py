@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple, Dict, Union
+from typing import List, Tuple, Dict, Optional, Union
 
 import PIL
 import cv2
@@ -17,6 +17,7 @@ from config import (
     RESOLUTION,
     MEAN,
     STD,
+    CRITICALITY_RATIO,
 )
 
 
@@ -33,13 +34,15 @@ class Runner:
         self.detector = Detector(self.opencv_image)
 
     def show_detections(self) -> None:
-        _, _, image, _ = self.run()
+        _, __, image, ___ = self.run()
 
         cv2.imshow("Image", image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def run(self) -> Tuple[str, str, np.ndarray]:
+    def run(
+        self,
+    ) -> Tuple[str, str, np.ndarray, Optional[Dict[str, Dict[str, Union[str, bool]]]]]:
         object_types = ["plate", "flat"]
         object_classification_result = self.classifier.make_classification(
             "object_classifier.pth", object_types
@@ -116,20 +119,27 @@ class Detector:
         self.confidences = None
         self.boxes = None
         self.classes = None
+        self.criticality_ratio = CRITICALITY_RATIO
 
     def get_bboxes(
         self, defect_types: List[str]
-    ) -> Tuple[Dict[Tuple[int, int, int, int], Dict[str, int]], Dict[str, str]]:
+    ) -> Tuple[
+        Dict[Tuple[int, int, int, int], Dict[str, bool]],
+        Dict[str, Dict[str, Union[str, bool]]],
+    ]:
         indices = self._remove_high_overlapping_boxes()
-        print(indices)
         bboxes = {}
         defects = {}
         for counter, idx in enumerate(indices):
             idx = idx[0]
             x, y, w, h = self.boxes[idx]
-            box = round(x), round(y), round(w), round(h)
-            bboxes[box] = {"id": counter + 1, "class": self.classes[idx]}
-            defects[str(counter + 1)] = defect_types[self.classes[idx]]
+            bbox = round(x), round(y), round(w), round(h)
+            is_critical = self._is_critical(bbox, self.classes[idx])
+            bboxes[bbox] = {"id": counter + 1, "is_critical": is_critical}
+            defects[str(counter + 1)] = {
+                "defect_type": defect_types[self.classes[idx]],
+                "is_critical": is_critical,
+            }
         return bboxes, defects
 
     def _remove_high_overlapping_boxes(self) -> np.ndarray:
@@ -171,6 +181,16 @@ class Detector:
         layer_names = self.model.getLayerNames()
         return [layer_names[i[0] - 1] for i in self.model.getUnconnectedOutLayers()]
 
+    def _is_critical(self, bbox: Tuple[int, int, int, int], label: int) -> bool:
+        is_critical = False
+        if label == 1:
+            is_critical = True
+        else:
+            _, __, bbox_width, bbox_height = bbox
+            if bbox_width * bbox_height > self.criticality_ratio:
+                is_critical = True
+        return is_critical
+
 
 class Drawer:
     """
@@ -202,12 +222,12 @@ class Drawer:
         )
 
     def draw_bboxes(
-        self, bboxes: Dict[Tuple[int, int, int, int], Dict[str, int]]
+        self, bboxes: Dict[Tuple[int, int, int, int], Dict[str, bool]]
     ) -> None:
         for bbox, label in bboxes.items():
             p1 = (bbox[0], bbox[1])
             p2 = (bbox[0] + bbox[2], bbox[1] + bbox[3])
-            color = (25, 168, 235) if label["class"] == 0 else (205, 97, 224)
+            color = (0, 56, 255) if label["is_critical"] else (255, 255, 0)
             cv2.rectangle(self.image, p1, p2, color, 3)
             cv2.putText(
                 self.image,
