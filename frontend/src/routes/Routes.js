@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import Main from "../pages/Main";
+import Main from "../pages/Main/Main";
 import Statistics from "../pages/Statictics";
 import { Navigation } from "../components/Navigation";
 
