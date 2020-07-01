@@ -29,7 +29,6 @@ function Statictics() {
     title: {
       text: "",
     },
-    chart: { width: 950 },
     xAxis: {
       categories: defaultCategories,
     },
@@ -74,17 +73,16 @@ function Statictics() {
       if (click === 0) {
         options.series[0].data = getData(defaultCriticalData);
         options.series[1].data = getData(defaultNoCriticalData);
-        return <HighchartsReact highcharts={Highcharts} options={options} />;
       }
       if (click === 1) {
         options.series[0].data = getData(scratchCriticalData);
         options.series[1].data = getData(scratchNoCritialData);
-        return <HighchartsReact highcharts={Highcharts} options={options} />;
-      } else {
+      }
+      if (click == 2) {
         options.series[0].data = getData(recessCriticalData);
         options.series[1].data = getData(recessNoCritialData);
-        return <HighchartsReact highcharts={Highcharts} options={options} />;
       }
+      return <HighchartsReact highcharts={Highcharts} options={options} />;
     }
   };
 
@@ -101,10 +99,10 @@ function Statictics() {
 
   return (
     <>
-      <S.RowWrapper>
+      <S.TitleWrapper>
         <S.Title>Anomalies detected</S.Title>
         <S.GenerateRaportWrapper>Generate raport</S.GenerateRaportWrapper>
-      </S.RowWrapper>
+      </S.TitleWrapper>
       {categories.map((item, index) => (
         <S.CategoryButton
           key={item}
@@ -142,7 +140,7 @@ function Statictics() {
           />
         </S.DateSelectorWrapper>
         {incorrectTimeRange && <h1>Incorrect time range</h1>}
-        {renderChart()}
+        <S.StyledChart>{renderChart()}</S.StyledChart>
       </S.ChartWrapper>
     </>
   );
