@@ -1,19 +1,35 @@
 import styled from "styled-components";
 
-import { fontSize, colors } from "../styles/variable";
+import { fontSize, colors, mediaQueries } from "../styles/variable";
+import { RowsWrapper } from "./MainPage";
 
 export const ChartWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 30rem;
   margin-top: 3rem;
+
+  ${mediaQueries.xxl} {
+    flex-direction: row;
+  }
 `;
 
 export const DateSelectorWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 22rem;
+  margin-left: 1rem;
+  width: 18rem;
+
+  ${mediaQueries.sm} {
+    flex-direction: row;
+    align-items: center;
+    width: 22rem;
+  }
+
+  ${mediaQueries.xxl} {
+    flex-direction: column;
+    margin-left: 0;
+  }
 `;
 
 export const InputWrapper = styled.label`
@@ -59,8 +75,11 @@ export const GenerateRaportWrapper = styled.button`
   color: ${colors.white};
   font-size: ${fontSize.mediumExtended};
   border-radius: 5px;
-  margin-top: 2.5rem;
-  margin-right: 1.5rem;
+
+  ${mediaQueries.sm} {
+    margin-top: 2.5rem;
+    margin-right: 1.5rem;
+  }
 `;
 
 export const CategoryButton = styled.button`
@@ -72,4 +91,18 @@ export const CategoryButton = styled.button`
   font-size: ${fontSize.large};
   color: ${colors.white};
   margin-left: 1.3rem;
+  margin-top: 0.5rem;
+`;
+
+export const TitleWrapper = styled(RowsWrapper)`
+  flex-direction: column;
+
+  ${mediaQueries.sm} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`;
+
+export const StyledChart = styled.div`
+  width: 95vw;
 `;
