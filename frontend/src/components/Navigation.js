@@ -42,9 +42,6 @@ export const NavLinkWrapper = styled(NavLink)`
   border-radius: 5px;
   line-height: 3rem;
   text-decoration: none;
-  :last-child {
-    margin-left: 25rem;
-  }
 
   &:hover {
     color: ${colors.white};
@@ -57,10 +54,7 @@ export const NavLinkWrapper = styled(NavLink)`
 
 const data = [
   { src: "MenuIcon.svg", path: "/", title: "Menu" },
-  { src: "ControlIcon.svg", path: "/control", title: "Control" },
   { src: "StatisticsIcon.svg", path: "/statistics", title: "Statistics" },
-  { src: "SettingsIcon.svg", path: "/settings", title: "Settings" },
-  { src: "ProfileIcon.svg", path: "/profile", title: "Profile" },
 ];
 
 export const Navigation = () => {
