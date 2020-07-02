@@ -22,6 +22,7 @@ export const months = [
   "November",
   "December",
 ];
+
 export const defaultCriticalData = {
   January: 50,
   February: 50,
@@ -106,3 +107,9 @@ export const recessNoCritialData = {
   November: 75,
   December: 50,
 };
+
+export const dataByCategory = [
+  [defaultCriticalData, defaultNoCriticalData],
+  [scratchCriticalData, scratchNoCritialData],
+  [recessCriticalData, recessNoCritialData],
+];

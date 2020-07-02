@@ -12,18 +12,15 @@ import {
   months,
   defaultCriticalData,
   defaultNoCriticalData,
-  scratchCriticalData,
-  scratchNoCritialData,
-  recessCriticalData,
-  recessNoCritialData,
   defaultCategories,
+  dataByCategory,
 } from "../constants";
 
 function Statictics() {
   const [startDate, setStartDate] = React.useState(new Date("2019/09/01"));
   const [endDate, setEndDate] = React.useState(new Date("2020/03/01"));
   const [incorrectTimeRange, setIncorrectTimeRange] = React.useState(false);
-  const [click, setClick] = React.useState(0);
+  const [categoryIndex, setCategoryIndex] = React.useState(0);
 
   const options = {
     title: {
@@ -69,25 +66,15 @@ function Statictics() {
       });
       const newCategories = result.map((item) => months[item.getMonth()]);
       options.xAxis.categories = newCategories;
+      options.series[0].data = getData(dataByCategory[categoryIndex][0]);
+      options.series[1].data = getData(dataByCategory[categoryIndex][1]);
 
-      if (click === 0) {
-        options.series[0].data = getData(defaultCriticalData);
-        options.series[1].data = getData(defaultNoCriticalData);
-      }
-      if (click === 1) {
-        options.series[0].data = getData(scratchCriticalData);
-        options.series[1].data = getData(scratchNoCritialData);
-      }
-      if (click == 2) {
-        options.series[0].data = getData(recessCriticalData);
-        options.series[1].data = getData(recessNoCritialData);
-      }
       return <HighchartsReact highcharts={Highcharts} options={options} />;
     }
   };
 
   const hadleClick = (index) => {
-    setClick(index);
+    setCategoryIndex(index);
   };
 
   const CustomInput = ({ value, onClick }) => (
@@ -107,7 +94,7 @@ function Statictics() {
         <S.CategoryButton
           key={item}
           onClick={() => hadleClick(index)}
-          active={click === index}
+          active={categoryIndex === index}
         >
           {item}
         </S.CategoryButton>
