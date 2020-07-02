@@ -8,15 +8,10 @@ function Main() {
   const [successStatus, setSuccessStatus] = useState(null);
   const [failureStatus, setFailureStatus] = useState(null);
   const criticalDamages =
-    failureStatus &&
-    Object.values(failureStatus.defects).find(
-      ({ is_critical }) => is_critical === true
-    );
+    failureStatus && Object.values(failureStatus.defects).find({ is_critical });
   const noDamages =
     failureStatus &&
-    Object.values(failureStatus.defects).find(
-      ({ is_critical }) => is_critical === false
-    );
+    Object.values(failureStatus.defects).find(!{ is_critical });
 
   return (
     <S.PageWrapper>

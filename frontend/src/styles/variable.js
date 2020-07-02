@@ -32,12 +32,14 @@ export const colors = {
   spray: "#78ECED",
   silverSand: "#B9C0C0",
   critical: "#ff3800",
-  noCritical: "#808080",
+  notCritical: "#808080",
   menu: "#333841",
   tab: "#22B654",
   statusBackground: "#f0f0f0",
   detectiveTab: "#ff0000",
   border: "#adbace",
+  cameraButtonBorder: "#d9d9d9",
+  cameraButtonFont: "#8f8f8f",
 };
 
 export const fontSize = {

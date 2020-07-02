@@ -51,8 +51,7 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     }, 2000);
     const response = await getStatus(data);
     if (response.state === "good") {
-      setSuccessStatus(response);
-      return;
+      return setSuccessStatus(response);
     }
     setFailureStatus(response);
     const picture = await getPictureWithDamage({ filename: response.filename });

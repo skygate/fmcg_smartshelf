@@ -57,17 +57,15 @@ const data = [
   { src: "StatisticsIcon.svg", path: "/statistics", title: "Statistics" },
 ];
 
-export const Navigation = () => {
-  return (
-    <MenuWrapper>
-      {data.map(({ src, path, title }) => {
-        return (
-          <NavLinkWrapper to={path} exact activeClassName="active" key={src}>
-            <IconWrapper src={src} alt={title} />
-            {title}
-          </NavLinkWrapper>
-        );
-      })}
-    </MenuWrapper>
-  );
-};
+export const Navigation = () => (
+  <MenuWrapper>
+    {data.map(({ src, path, title }) => {
+      return (
+        <NavLinkWrapper to={path} exact activeClassName="active" key={src}>
+          <IconWrapper src={src} alt={title} />
+          {title}
+        </NavLinkWrapper>
+      );
+    })}
+  </MenuWrapper>
+);

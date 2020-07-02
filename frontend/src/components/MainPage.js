@@ -210,7 +210,7 @@ export const RowsWrapper = styled.div`
 export const ListElement = styled.div`
   font-size: ${fontSize.normal};
   margin-right: 0.5rem;
-  color: ${({ isActive }) => (isActive ? colors.critical : colors.noCritical)};
+  color: ${({ isActive }) => (isActive ? colors.critical : colors.notCritical)};
 `;
 
 export const ListRowsWrapper = styled.div`
@@ -287,16 +287,16 @@ export const Status = styled.div`
 
 export const TableStatus = styled.div`
   color: ${({ isCritical }) =>
-    isCritical ? colors.critical : colors.noCritical};
+    isCritical ? colors.critical : colors.notCritical};
   margin-left: 2rem;
   font-size: ${fontSize.extraLarge};
 `;
 
 export const Number = styled.div`
   border: 1px solid
-    ${({ isCritical }) => (isCritical ? colors.critical : colors.noCritical)};
+    ${({ isCritical }) => (isCritical ? colors.critical : colors.notCritical)};
   color: ${({ isCritical }) =>
-    isCritical ? colors.critical : colors.noCritical};
+    isCritical ? colors.critical : colors.notCritical};
   border-radius: 5px 0 0 5px;
   font-size: ${fontSize.medium};
   width: 2.25rem;
@@ -306,9 +306,9 @@ export const Number = styled.div`
 
 export const Element = styled.div`
   border: 1px solid
-    ${({ isCritical }) => (isCritical ? colors.critical : colors.noCritical)};
+    ${({ isCritical }) => (isCritical ? colors.critical : colors.notCritical)};
   color: ${({ isCritical }) =>
-    isCritical ? colors.critical : colors.noCritical};
+    isCritical ? colors.critical : colors.notCritical};
   text-transform: uppercase;
   border-radius: 0 5px 5px 0;
   font-size: ${fontSize.medium};
