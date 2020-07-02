@@ -32,8 +32,6 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
       authorization: "authorization-text",
     },
     async onChange(info) {
-      if (info.file.status !== "uploading") {
-      }
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
         setImagePreviewState(await getBase64(info.file.originFileObj));
