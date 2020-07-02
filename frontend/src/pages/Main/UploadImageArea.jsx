@@ -25,7 +25,7 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     accept: ".jpg,.png",
     customRequest: ({ onSuccess }) => {
       setTimeout(() => {
-        onSuccess("ok");
+        onSuccess("Simulating backend response");
       }, 0);
     },
     headers: {
