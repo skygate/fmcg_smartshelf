@@ -59,3 +59,7 @@ export const fontSize = {
   biggestExtended: "4rem",
   offTheScale: "5rem",
 };
+
+export const fontFamily = {
+  spartan: "'Spartan', sans-serif",
+};
