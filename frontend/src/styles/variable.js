@@ -31,8 +31,15 @@ export const colors = {
   turquoiseBlue: "#61D7ED",
   spray: "#78ECED",
   silverSand: "#B9C0C0",
-  scratches: "#eba919",
-  recess: "#e061cd",
+  critical: "#ff3800",
+  notCritical: "#808080",
+  menu: "#333841",
+  tab: "#22B654",
+  statusBackground: "#f0f0f0",
+  detectiveTab: "#ff0000",
+  border: "#adbace",
+  cameraButtonBorder: "#d9d9d9",
+  cameraButtonFont: "#8f8f8f",
 };
 
 export const fontSize = {
