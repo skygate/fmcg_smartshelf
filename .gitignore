@@ -4,7 +4,6 @@ venv/
 
 *.jpg
 *.pth
-*.json
 *.cfg
 *.weights
 
