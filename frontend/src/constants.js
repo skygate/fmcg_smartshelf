@@ -80,7 +80,7 @@ export const scratchNoCritialData = {
   December: 120,
 };
 export const recessCriticalData = {
-  January: 50,
+  January: 30,
   February: 30,
   March: 30,
   April: 30,
@@ -113,3 +113,36 @@ export const dataByCategory = [
   [scratchCriticalData, scratchNoCritialData],
   [recessCriticalData, recessNoCritialData],
 ];
+
+export const highchartsDefaultOptions = {
+  title: {
+    text: "",
+  },
+  xAxis: {
+    categories: defaultCategories,
+  },
+  series: [
+    {
+      type: "column",
+      name: "Critical faults",
+      color: "#E42900",
+      data: defaultCategories.map((item) => defaultCriticalData[item]),
+    },
+    {
+      type: "column",
+      name: "Non-critical faults",
+      color: "#BCCDDE",
+      data: defaultCategories.map((item) => defaultNoCriticalData[item]),
+    },
+  ],
+  legend: {
+    align: "right",
+    backgroundColor: "#FFFFFF",
+    floating: true,
+    borderWidth: 0,
+    verticalAlign: "top",
+    x: 0,
+    y: 0,
+    reversed: true,
+  },
+};

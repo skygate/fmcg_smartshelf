@@ -10,9 +10,7 @@ import * as S from "../components/Statistics";
 import {
   categories,
   months,
-  defaultCriticalData,
-  defaultNoCriticalData,
-  defaultCategories,
+  highchartsDefaultOptions,
   dataByCategory,
 } from "../constants";
 
@@ -22,54 +20,38 @@ function Statictics() {
   const [incorrectTimeRange, setIncorrectTimeRange] = React.useState(false);
   const [categoryIndex, setCategoryIndex] = React.useState(0);
 
-  const options = {
-    title: {
-      text: "",
-    },
-    xAxis: {
-      categories: defaultCategories,
-    },
-    series: [
-      {
-        type: "column",
-        name: "Critical faults",
-        color: "#E42900",
-        data: defaultCategories.map((item) => defaultCriticalData[item]),
+  const formatHighchartsOptions = (highchartsOptions, monthsBetween) => {
+    const categories = monthsBetween.map((item) => months[item.getMonth()]);
+    return {
+      ...highchartsOptions,
+      xAxis: {
+        ...monthsBetween.xAxis,
+        categories,
       },
-      {
-        type: "column",
-        name: "Non-critical faults",
-        color: "#BCCDDE",
-        data: defaultCategories.map((item) => defaultNoCriticalData[item]),
-      },
-    ],
-    legend: {
-      align: "right",
-      backgroundColor: "#FFFFFF",
-      floating: true,
-      borderWidth: 0,
-      verticalAlign: "top",
-      x: 0,
-      y: 0,
-      reversed: true,
-    },
+      series: highchartsOptions.series.map((seriesElement, i) => ({
+        ...seriesElement,
+        data: getData(dataByCategory[categoryIndex][i], categories),
+      })),
+    };
   };
 
-  const getData = (source) =>
-    options.xAxis.categories.map((item) => source[item]);
+  const getData = (source, categories) =>
+    categories.map((item) => source[item]);
 
   const renderChart = () => {
     if (startDate <= endDate) {
-      const result = eachMonthOfInterval({
+      const monthsBetween = eachMonthOfInterval({
         start: startDate,
         end: endDate,
       });
-      const newCategories = result.map((item) => months[item.getMonth()]);
-      options.xAxis.categories = newCategories;
-      options.series[0].data = getData(dataByCategory[categoryIndex][0]);
-      options.series[1].data = getData(dataByCategory[categoryIndex][1]);
+      const highchartsOptions = formatHighchartsOptions(
+        highchartsDefaultOptions,
+        monthsBetween
+      );
 
-      return <HighchartsReact highcharts={Highcharts} options={options} />;
+      return (
+        <HighchartsReact highcharts={Highcharts} options={highchartsOptions} />
+      );
     }
   };
 
