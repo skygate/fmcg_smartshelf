@@ -31,7 +31,7 @@ export const FirstColumn = styled.div`
   }
 `;
 
-const ImagesSize = css`
+export const ImagesSize = css`
   width: 20rem;
   height: 11.25rem;
   margin: 1rem auto;
@@ -67,13 +67,15 @@ export const UploadWrapper = styled.div`
 `;
 
 export const UploadSymbol = styled.img`
-  margin: 2rem auto;
-  height: 4rem;
-  width: 4rem;
-  border-radius: 5px;
+  display: none;
 
   ${mediaQueries.sm} {
     margin: 6rem auto 1rem;
+    margin: 2rem auto;
+    height: 4rem;
+    width: 4rem;
+    border-radius: 5px;
+    display: block;
   }
 
   ${mediaQueries.md} {
@@ -144,7 +146,10 @@ export const ImageWithDamage = styled.img`
 `;
 
 export const UploadAndtWrapper = styled(Upload)`
-  margin: 0 auto;
+  margin: 2rem 0;
+  ${mediaQueries.sm} {
+    margin: 0 auto;
+  }
 `;
 
 const AndtButton = css`
@@ -315,4 +320,14 @@ export const Element = styled.div`
   width: 9.5rem;
   text-align: center;
   margin-bottom: 0.5rem;
+`;
+
+export const SymbolSectionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+  ${mediaQueries.sm} {
+    flex-direction: row;
+  }
 `;

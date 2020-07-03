@@ -1,9 +1,10 @@
 import React from "react";
-import * as S from "../../components/MainPage";
 import { Button, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
+import * as S from "../../components/MainPage";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
+import { WebCamera } from "./WebCamera";
 
 const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -19,6 +20,7 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   const [dataToSend, setDataToSend] = React.useState(null);
   const [pictureWithDamage, setPictureWithDamage] = React.useState(null);
   const [imagePreviewState, setImagePreviewState] = React.useState(null);
+  const [isWebCameraActive, setIsWebCameraActive] = React.useState(false);
 
   const props = {
     name: "file",
@@ -100,12 +102,21 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   }
   return (
     <S.UploadWrapper>
-      <S.UploadSymbol src="upload.svg" />
-      <S.UploadAndtWrapper {...props}>
-        <Button>
-          <UploadOutlined /> Click to Upload
-        </Button>
-      </S.UploadAndtWrapper>
+      <S.SymbolSectionWrapper>
+        {!isWebCameraActive && (
+          <S.ColumnsWrapper>
+            <S.UploadSymbol src="Upload.svg" />
+            <S.UploadAndtWrapper {...props}>
+              <Button>
+                <UploadOutlined /> Click to Upload
+              </Button>
+            </S.UploadAndtWrapper>
+          </S.ColumnsWrapper>
+        )}
+        <S.ColumnsWrapper>
+          <WebCamera setIsWebCameraActive={setIsWebCameraActive} />
+        </S.ColumnsWrapper>
+      </S.SymbolSectionWrapper>
     </S.UploadWrapper>
   );
 };
