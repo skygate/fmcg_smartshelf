@@ -34,20 +34,27 @@ export const StyledWebCamera = styled(Webcam)`
 
 const ScreenshotButton = styled.button``;
 
-export const WebCamera = ({ setIsWebCameraActive }) => {
+export const WebCamera = ({
+  setIsWebCameraActive,
+  imageSrc,
+  setImageSrc,
+  setDecodedImage,
+}) => {
   const [webcamEnabled, setWebcamEnabled] = React.useState(false);
   const webcamRef = React.useRef(null);
-  const capture = React.useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
+
+  const handleCapture = React.useCallback(() => {
+    setImageSrc(webcamRef.current.getScreenshot());
     fetch(imageSrc)
       .then((res) => res.blob())
       .then((blob) => {
-        const file = new File([blob], "File name", { type: "image/png" });
-        console.log(file);
+        setDecodedImage(
+          new File([blob], "Filename.jpg", { type: "image/jpg" })
+        );
       });
   }, [webcamRef]);
 
-  const handleClick = () => {
+  const handleEnableWebcam = () => {
     setIsWebCameraActive(true);
     setWebcamEnabled(true);
   };
@@ -55,12 +62,12 @@ export const WebCamera = ({ setIsWebCameraActive }) => {
   return webcamEnabled ? (
     <>
       <StyledWebCamera ref={webcamRef} screenshotFormat="image/jpg" />
-      <ScreenshotButton onClick={capture}>Capture photo</ScreenshotButton>
+      <ScreenshotButton onClick={handleCapture}>Capture photo</ScreenshotButton>
     </>
   ) : (
     <CameraWrapper>
       <S.UploadSymbol src="Camera.svg" />
-      <CameraButton onClick={handleClick}>Enable webcam</CameraButton>
+      <CameraButton onClick={handleEnableWebcam}>Enable webcam</CameraButton>
     </CameraWrapper>
   );
 };

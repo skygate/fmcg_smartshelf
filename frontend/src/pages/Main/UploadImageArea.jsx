@@ -17,10 +17,12 @@ const getBase64 = (file) => {
 
 export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   const [hideGif, setHideGif] = React.useState(false);
-  const [dataToSend, setDataToSend] = React.useState(null);
+  const [uploadedImage, setUploadedImage] = React.useState(null);
   const [pictureWithDamage, setPictureWithDamage] = React.useState(null);
   const [imagePreviewState, setImagePreviewState] = React.useState(null);
   const [isWebCameraActive, setIsWebCameraActive] = React.useState(false);
+  const [decodedImage, setDecodedImage] = React.useState(null);
+  const [imageSrc, setImageSrc] = React.useState(null);
 
   const props = {
     name: "file",
@@ -37,17 +39,17 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
         setImagePreviewState(await getBase64(info.file.originFileObj));
-        setDataToSend(info.file.originFileObj);
+        setUploadedImage(info.file.originFileObj);
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
   };
 
-  const handleDetection = async () => {
+  const handleDetection = async (imageToDiagnoze) => {
     setHideGif(true);
     const data = new FormData();
-    data.append("file", dataToSend);
+    data.append("file", imageToDiagnoze);
     setTimeout(() => {
       setHideGif(false);
     }, 2000);
@@ -66,6 +68,10 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     setPictureWithDamage(null);
     setFailureStatus(null);
     setSuccessStatus(null);
+    setIsWebCameraActive(null);
+    setImageSrc(null);
+    setUploadedImage(null);
+    setDecodedImage(null);
   };
 
   if (pictureWithDamage) {
@@ -81,7 +87,8 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
       </S.ColumnsWrapper>
     );
   }
-  if (imagePreviewState) {
+
+  if (imagePreviewState || imageSrc) {
     return (
       <S.ColumnsWrapper>
         {hideGif ? (
@@ -89,11 +96,13 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
             <S.GifWrapper src={"loader.gif"} isActive={!hideGif} />
           </S.LoaderWrapper>
         ) : (
-          <S.ResultImage src={imagePreviewState} />
+          <S.ResultImage src={imagePreviewState || imageSrc} />
         )}
         <S.ButtonsWrapper>
           <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
-          <S.DetectButton onClick={handleDetection}>
+          <S.DetectButton
+            onClick={() => handleDetection(uploadedImage || decodedImage)}
+          >
             Run detection
           </S.DetectButton>
         </S.ButtonsWrapper>
@@ -114,7 +123,12 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
           </S.ColumnsWrapper>
         )}
         <S.ColumnsWrapper>
-          <WebCamera setIsWebCameraActive={setIsWebCameraActive} />
+          <WebCamera
+            setIsWebCameraActive={setIsWebCameraActive}
+            imageSrc={imageSrc}
+            setDecodedImage={setDecodedImage}
+            setImageSrc={setImageSrc}
+          />
         </S.ColumnsWrapper>
       </S.SymbolSectionWrapper>
     </S.UploadWrapper>
