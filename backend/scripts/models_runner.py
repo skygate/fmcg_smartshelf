@@ -42,20 +42,11 @@ class Runner:
 
     def run(
         self,
-    ) -> Tuple[str, str, np.ndarray, Optional[Dict[str, Dict[str, Union[str, bool]]]]]:
-        object_types = ["plate", "flat"]
-        object_classification_result = self.classifier.make_classification(
-            "object_classifier.pth", object_types
+    ) -> Tuple[str, np.ndarray, Optional[Dict[str, Dict[str, Union[str, bool]]]]]:
+        states = ["creased", "defective", "good"]
+        state_classification_result = self.classifier.make_classification(
+            "classifier.pth", states
         )
-
-        states = ["good", "defective"]
-        models = {
-            "plate": self.classifier.make_classification("plate_state.pth", states),
-            "flat": self.classifier.make_classification("flat_state.pth", states),
-        }
-        state_classification_result = models[object_classification_result]
-
-        # self.drawer.put_text(object_classification_result, state_classification_result)
 
         defect_types = ["scratches", "recess"]
         defects = None
@@ -64,7 +55,6 @@ class Runner:
             self.drawer.draw_bboxes(bboxes)
 
         return (
-            object_classification_result,
             state_classification_result,
             self.drawer.image,
             defects,
@@ -199,27 +189,6 @@ class Drawer:
 
     def __init__(self, image: np.ndarray) -> None:
         self.image = cv2.resize(image, (1920, 1080))
-
-    def put_text(self, object_type: str, state: str) -> None:
-        cv2.putText(
-            self.image,
-            f"Object: {object_type}",
-            (10, 30),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            (0, 255, 255),
-            2,
-        )
-        color = (0, 255, 0) if state == "good" else (0, 0, 255)
-        cv2.putText(
-            self.image,
-            f"State: {state}",
-            (10, 75),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            color,
-            2,
-        )
 
     def draw_bboxes(
         self, bboxes: Dict[Tuple[int, int, int, int], Dict[str, bool]]
