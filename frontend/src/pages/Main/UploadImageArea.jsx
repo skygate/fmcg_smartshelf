@@ -1,11 +1,10 @@
 import React from "react";
-import { Button, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
 
 import * as S from "../../components/MainPage";
+import { PictureWithDamage } from "./PictureWithDamage";
+import { UploadMenu } from "./UploadMenu";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
-import { getBase64 } from "../../helpers/FileToBase64";
-import { WebCamera } from "./WebCamera";
+import { Loader } from "./Loader";
 
 export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   const [hideGif, setHideGif] = React.useState(false);
@@ -16,26 +15,15 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   const [decodedImage, setDecodedImage] = React.useState(null);
   const [imageSrc, setImageSrc] = React.useState(null);
 
-  const props = {
-    name: "file",
-    accept: ".jpg,.png",
-    customRequest: ({ onSuccess }) => {
-      setTimeout(() => {
-        onSuccess("Simulating backend response");
-      }, 0);
-    },
-    headers: {
-      authorization: "authorization-text",
-    },
-    async onChange(info) {
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-        setImagePreviewState(await getBase64(info.file.originFileObj));
-        setUploadedImage(info.file.originFileObj);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+  const handleReset = () => {
+    setImagePreviewState(null);
+    setPictureWithDamage(null);
+    setFailureStatus(null);
+    setSuccessStatus(null);
+    setIsWebCameraActive(null);
+    setImageSrc(null);
+    setUploadedImage(null);
+    setDecodedImage(null);
   };
 
   const activateGif = () => {
@@ -69,74 +57,38 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     checkStatus(damagesList);
   };
 
-  const handleReset = () => {
-    setImagePreviewState(null);
-    setPictureWithDamage(null);
-    setFailureStatus(null);
-    setSuccessStatus(null);
-    setIsWebCameraActive(null);
-    setImageSrc(null);
-    setUploadedImage(null);
-    setDecodedImage(null);
-  };
-
   if (pictureWithDamage) {
     return (
-      <S.ColumnsWrapper>
-        <S.ImageWithDamage src={pictureWithDamage}></S.ImageWithDamage>
-        <S.ButtonsWrapper>
-          <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
-          <S.DetectButton onClick={handleDetection}>
-            Run detection
-          </S.DetectButton>
-        </S.ButtonsWrapper>
-      </S.ColumnsWrapper>
+      <PictureWithDamage
+        pictureWithDamage={pictureWithDamage}
+        handleReset={handleReset}
+        handleDetection={handleDetection}
+      />
     );
   }
 
   if (imagePreviewState || imageSrc) {
     return (
-      <S.ColumnsWrapper>
-        {hideGif ? (
-          <S.LoaderWrapper>
-            <S.GifWrapper src={"loader.gif"} isActive={!hideGif} />
-          </S.LoaderWrapper>
-        ) : (
-          <S.ResultImage src={imagePreviewState || imageSrc} />
-        )}
-        <S.ButtonsWrapper>
-          <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
-          <S.DetectButton
-            onClick={() => handleDetection(uploadedImage || decodedImage)}
-          >
-            Run detection
-          </S.DetectButton>
-        </S.ButtonsWrapper>
-      </S.ColumnsWrapper>
+      <Loader
+        hideGif={hideGif}
+        handleReset={handleReset}
+        handleDetection={handleDetection}
+        imagePreviewState={imagePreviewState}
+        imageSrc={imageSrc}
+        uploadedImage={uploadedImage}
+        decodedImage={decodedImage}
+      />
     );
   }
   return (
-    <S.UploadWrapper>
-      <S.SymbolSectionWrapper>
-        {!isWebCameraActive && (
-          <S.ColumnsWrapper>
-            <S.UploadSymbol src="Upload.svg" />
-            <S.UploadAndtWrapper {...props}>
-              <Button>
-                <UploadOutlined /> Click to Upload
-              </Button>
-            </S.UploadAndtWrapper>
-          </S.ColumnsWrapper>
-        )}
-        <S.ColumnsWrapper>
-          <WebCamera
-            setIsWebCameraActive={setIsWebCameraActive}
-            imageSrc={imageSrc}
-            setDecodedImage={setDecodedImage}
-            setImageSrc={setImageSrc}
-          />
-        </S.ColumnsWrapper>
-      </S.SymbolSectionWrapper>
-    </S.UploadWrapper>
+    <UploadMenu
+      isWebCameraActive={isWebCameraActive}
+      setImageSrc={setImageSrc}
+      imageSrc={imageSrc}
+      setUploadedImage={setUploadedImage}
+      setImagePreviewState={setImagePreviewState}
+      setIsWebCameraActive={setIsWebCameraActive}
+      setDecodedImage={setDecodedImage}
+    />
   );
 };
