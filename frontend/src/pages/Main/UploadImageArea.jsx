@@ -62,7 +62,6 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
       <PictureWithDamage
         pictureWithDamage={pictureWithDamage}
         handleReset={handleReset}
-        handleDetection={handleDetection}
       />
     );
   }
