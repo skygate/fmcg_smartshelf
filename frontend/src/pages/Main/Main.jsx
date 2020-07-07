@@ -38,7 +38,6 @@ function Main() {
         <S.SecondColumn>
           {failureStatus && (
             <S.ColumnsWrapper>
-              <S.ResultStatus>{`Object: ${failureStatus.type}`}</S.ResultStatus>
               <S.ColumnsWrapper>
                 {criticalDamages && (
                   <S.TableStatus isCritical={true}>CRITICAL</S.TableStatus>
