@@ -1,1 +1,6 @@
 *.json
+*.jpg
+*.JPG
+*.pth
+*.cfg
+*.weights
