@@ -34,7 +34,16 @@ export const StyledWebCamera = styled(Webcam)`
   }
 `;
 
-const ScreenshotButton = styled.button``;
+const ScreenshotButton = styled.button`
+  width: 9.5rem;
+  height: 2rem;
+  background-color: ${colors.white};
+  border: 1px solid ${colors.cameraButtonBorder};
+  border-radius: 2px;
+  color: ${colors.cameraButtonFont};
+  font-weight: 500;
+  margin: 0.5rem auto;
+`;
 
 export const WebCamera = ({
   setIsWebCameraActive,
