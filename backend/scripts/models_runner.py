@@ -17,7 +17,6 @@ from config import (
     RESOLUTION,
     MEAN,
     STD,
-    CRITICALITY_RATIO,
 )
 
 
@@ -48,7 +47,12 @@ class Runner:
             "classifier.pth", states
         )
 
-        defect_types = ["recess_critical", "recess_non_critical", "scratch_critical", "scratch_non_critical"]
+        defect_types = [
+            "recess_critical",
+            "recess_non_critical",
+            "scratch_critical",
+            "scratch_non_critical",
+        ]
         defects = None
         if state_classification_result == "defective":
             bboxes, defects = self.detector.get_bboxes(defect_types)

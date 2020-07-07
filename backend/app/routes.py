@@ -32,13 +32,7 @@ def run():
     upload_path = os.path.join(UPLOAD_FOLDER, file.filename)
     cv2.imwrite(upload_path, image_with_bboxes)
 
-    return jsonify(
-        {
-            "state": state,
-            "defects": defects,
-            "filename": file.filename,
-        }
-    )
+    return jsonify({"state": state, "defects": defects, "filename": file.filename})
 
 
 @api.route("/get_detections", methods=["POST"])
