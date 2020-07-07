@@ -47,7 +47,6 @@ const ScreenshotButton = styled.button`
 
 export const WebCamera = ({
   setIsWebCameraActive,
-  imageSrc,
   setImageSrc,
   setDecodedImage,
 }) => {

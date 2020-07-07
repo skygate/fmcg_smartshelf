@@ -3,7 +3,7 @@ import React from "react";
 import * as S from "../../components/MainPage";
 
 export const Loader = ({
-  hideGif,
+  shouldHideGif,
   handleDetection,
   handleReset,
   imagePreviewState,
@@ -12,9 +12,9 @@ export const Loader = ({
   decodedImage,
 }) => (
   <S.ColumnsWrapper>
-    {hideGif ? (
+    {shouldHideGif ? (
       <S.LoaderWrapper>
-        <S.GifWrapper src={"loader.gif"} isActive={!hideGif} />
+        <S.GifWrapper src={"loader.gif"} isActive={!shouldHideGif} />
       </S.LoaderWrapper>
     ) : (
       <S.ResultImage src={imagePreviewState || imageSrc} />
