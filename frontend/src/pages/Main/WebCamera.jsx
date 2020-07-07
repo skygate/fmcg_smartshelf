@@ -45,7 +45,10 @@ export const WebCamera = ({
   const webcamRef = React.useRef(null);
 
   const handleCapture = React.useCallback(() => {
-    const codedImage = webcamRef.current.getScreenshot();
+    const codedImage = webcamRef.current.getScreenshot({
+      width: 1920,
+      height: 1080,
+    });
     setImageSrc(webcamRef.current.getScreenshot());
     fetch(codedImage)
       .then((res) => res.blob())
