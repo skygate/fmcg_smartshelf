@@ -1,6 +1,5 @@
 import React from "react";
 
-import * as S from "../../components/MainPage";
 import { PictureWithDamage } from "./PictureWithDamage";
 import { UploadMenu } from "./UploadMenu";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
