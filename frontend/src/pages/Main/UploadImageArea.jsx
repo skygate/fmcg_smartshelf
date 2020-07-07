@@ -4,16 +4,8 @@ import { UploadOutlined } from "@ant-design/icons";
 
 import * as S from "../../components/MainPage";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
+import { getBase64 } from "../../helpers/FileToBase64";
 import { WebCamera } from "./WebCamera";
-
-const getBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-};
 
 export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   const [hideGif, setHideGif] = React.useState(false);
