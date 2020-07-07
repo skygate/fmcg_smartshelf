@@ -15,7 +15,7 @@ export const UploadMenu = ({
   setIsWebCameraActive,
   setDecodedImage,
 }) => {
-  const props = {
+  const uploadProps = {
     name: "file",
     accept: ".jpg,.png",
     customRequest: ({ onSuccess }) => {
@@ -43,7 +43,7 @@ export const UploadMenu = ({
         {!isWebCameraActive && (
           <S.ColumnsWrapper>
             <S.UploadSymbol src="Upload.svg" />
-            <S.UploadAndtWrapper {...props}>
+            <S.UploadAndtWrapper {...uploadProps}>
               <Button>
                 <UploadOutlined /> Click to Upload
               </Button>
@@ -53,7 +53,6 @@ export const UploadMenu = ({
         <S.ColumnsWrapper>
           <WebCamera
             setIsWebCameraActive={setIsWebCameraActive}
-            imageSrc={imageSrc}
             setDecodedImage={setDecodedImage}
             setImageSrc={setImageSrc}
           />

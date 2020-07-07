@@ -6,7 +6,7 @@ import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
 import { Loader } from "./Loader";
 
 export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
-  const [hideGif, setHideGif] = React.useState(false);
+  const [shouldHideGif, setShouldHideGif] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState(null);
   const [pictureWithDamage, setPictureWithDamage] = React.useState(null);
   const [imagePreviewState, setImagePreviewState] = React.useState(null);
@@ -19,16 +19,16 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     setPictureWithDamage(null);
     setFailureStatus(null);
     setSuccessStatus(null);
-    setIsWebCameraActive(null);
+    setIsWebCameraActive(false);
     setImageSrc(null);
     setUploadedImage(null);
     setDecodedImage(null);
   };
 
   const activateGif = () => {
-    setHideGif(true);
+    setShouldHideGif(true);
     setTimeout(() => {
-      setHideGif(false);
+      setShouldHideGif(false);
     }, 2000);
   };
 
@@ -68,7 +68,7 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   if (imagePreviewState || imageSrc) {
     return (
       <Loader
-        hideGif={hideGif}
+        shouldHideGif={shouldHideGif}
         handleReset={handleReset}
         handleDetection={handleDetection}
         imagePreviewState={imagePreviewState}
