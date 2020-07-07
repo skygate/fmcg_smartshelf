@@ -2,6 +2,7 @@ import React from "react";
 import Webcam from "react-webcam";
 import styled from "styled-components";
 
+import { decodeBase64 } from "../../helpers/Base64ToFile";
 import { colors, mediaQueries } from "../../styles/variable";
 import * as S from "../../components/MainPage";
 
@@ -45,21 +46,12 @@ export const WebCamera = ({
   const webcamRef = React.useRef(null);
 
   const handleCapture = React.useCallback(() => {
-    const codedImage = webcamRef.current.getScreenshot({
+    const encodedImage = webcamRef.current.getScreenshot({
       width: 1920,
       height: 1080,
     });
     setImageSrc(webcamRef.current.getScreenshot());
-    fetch(codedImage)
-      .then((res) => res.blob())
-      .then((res) => {
-        const fileName = new Date().getTime();
-        setDecodedImage(
-          new File([res], `${fileName}.jpg`, {
-            type: "image/jpg",
-          })
-        );
-      });
+    decodeBase64(encodedImage, setDecodedImage);
   }, [webcamRef]);
 
   const handleEnableWebcam = () => {
