@@ -38,10 +38,12 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     },
   };
 
-  const activateGif = () =>
+  const activateGif = () => {
+    setHideGif(true);
     setTimeout(() => {
       setHideGif(false);
     }, 2000);
+  };
 
   const getDagamesList = (imageToDiagnoze) => {
     const data = new FormData();
@@ -62,7 +64,6 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   };
 
   const handleDetection = async (imageToDiagnoze) => {
-    setHideGif(true);
     activateGif();
     const damagesList = await getDagamesList(imageToDiagnoze);
     checkStatus(damagesList);
