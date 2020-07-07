@@ -1,12 +1,22 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { createGlobalStyle } from "styled-components";
 
 import Main from "../pages/Main/Main";
 import Statistics from "../pages/Statictics";
 import { Navigation } from "../components/Navigation";
+import { fontFamily } from "../styles/variable";
 
-export const Routes = ({}) => {
-  return (
+const GlobalStyle = createGlobalStyle`
+ body{
+    font-family:${fontFamily.spartan};  
+ }
+  
+`;
+
+export const Routes = () => (
+  <>
+    <GlobalStyle />
     <BrowserRouter>
       <Navigation />
       <Switch>
@@ -19,5 +29,5 @@ export const Routes = ({}) => {
         </Route>
       </Switch>
     </BrowserRouter>
-  );
-};
+  </>
+);

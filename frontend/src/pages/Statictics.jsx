@@ -1,10 +1,8 @@
 import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import DatePicker from "react-datepicker";
 import { eachMonthOfInterval } from "date-fns";
-
-import "react-datepicker/dist/react-datepicker.css";
+import { DatePicker } from "antd";
 
 import * as S from "../components/Statistics";
 import {
@@ -14,10 +12,18 @@ import {
   dataByCategory,
 } from "../constants";
 
+const { RangePicker } = DatePicker;
+
+const INITIAL_START_DAY = new Date("2019/09/01");
+const INITIAL_END_DAY = new Date("2020/03/01");
+
 function Statictics() {
-  const [startDate, setStartDate] = React.useState(new Date("2019/09/01"));
-  const [endDate, setEndDate] = React.useState(new Date("2020/03/01"));
-  const [incorrectTimeRange, setIncorrectTimeRange] = React.useState(false);
+  const [timeRange, setTimeRange] = React.useState({
+    startDate: INITIAL_START_DAY,
+    endDate: INITIAL_END_DAY,
+  });
+  const [startDate, setStartDate] = React.useState(timeRange.startDate);
+  const [endDate, setEndDate] = React.useState(timeRange.endDate);
   const [categoryIndex, setCategoryIndex] = React.useState(0);
 
   const formatHighchartsOptions = (highchartsOptions, monthsBetween) => {
@@ -44,6 +50,7 @@ function Statictics() {
         start: startDate,
         end: endDate,
       });
+
       const highchartsOptions = formatHighchartsOptions(
         highchartsDefaultOptions,
         monthsBetween
@@ -55,16 +62,24 @@ function Statictics() {
     }
   };
 
-  const hadleClick = (index) => {
-    setCategoryIndex(index);
-  };
+  const hadleClick = setCategoryIndex;
 
-  const CustomInput = ({ value, onClick }) => (
-    <S.DatePickerWrapper onClick={onClick}>
-      {value}
-      <S.CalendarIcon src={"CalendarIcon.svg"} alt="calendar icon" />
-    </S.DatePickerWrapper>
+  const dateOutsideRange = (min, max) => (date) => date < min || date > max;
+
+  const invalidDate = dateOutsideRange(
+    new Date("2019/09/01"),
+    new Date("2020/03/01")
   );
+
+  const handleChange = (timeRange) => {
+    if (!timeRange) {
+      setTimeRange({ startDate: INITIAL_START_DAY, endDate: INITIAL_END_DAY });
+      return;
+    }
+    const [startDate, endDate] = timeRange;
+    setStartDate(startDate.toDate());
+    endDate && setEndDate(endDate.toDate());
+  };
 
   return (
     <>
@@ -83,32 +98,12 @@ function Statictics() {
       ))}
       <S.ChartWrapper>
         <S.DateSelectorWrapper>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            minDate={new Date("2019/09/01")}
-            maxDate={new Date("2020/03/01")}
-            dateFormat="MM/yyyy"
-            showMonthYearPicker
-            customInput={<CustomInput />}
-          />
-
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={new Date("2019/09/01")}
-            maxDate={new Date("2020/03/01")}
-            dateFormat="MM/yyyy"
-            showMonthYearPicker
-            customInput={<CustomInput />}
+          <RangePicker
+            picker="month"
+            disabledDate={invalidDate}
+            onChange={(timeRange) => handleChange(timeRange)}
           />
         </S.DateSelectorWrapper>
-        {incorrectTimeRange && <h1>Incorrect time range</h1>}
         <S.StyledChart>{renderChart()}</S.StyledChart>
       </S.ChartWrapper>
     </>
