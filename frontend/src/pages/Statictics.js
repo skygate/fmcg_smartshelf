@@ -18,8 +18,12 @@ const INITIAL_START_DAY = new Date("2019/09/01");
 const INITIAL_END_DAY = new Date("2020/03/01");
 
 function Statictics() {
-  const [startDate, setStartDate] = React.useState(INITIAL_START_DAY);
-  const [endDate, setEndDate] = React.useState(INITIAL_END_DAY);
+  const [timeRange, setTimeRange] = React.useState({
+    startDate: INITIAL_START_DAY,
+    endDate: INITIAL_END_DAY,
+  });
+  const [startDate, setStartDate] = React.useState(timeRange.startDate);
+  const [endDate, setEndDate] = React.useState(timeRange.endDate);
   const [categoryIndex, setCategoryIndex] = React.useState(0);
 
   const formatHighchartsOptions = (highchartsOptions, monthsBetween) => {
@@ -69,8 +73,7 @@ function Statictics() {
 
   const handleChange = (timeRange) => {
     if (!timeRange) {
-      setStartDate(INITIAL_START_DAY);
-      setEndDate(INITIAL_END_DAY);
+      setTimeRange({ startDate: INITIAL_START_DAY, endDate: INITIAL_END_DAY });
       return;
     }
     const [startDate, endDate] = timeRange;
