@@ -26,7 +26,8 @@ const CameraButton = styled.button`
 
 export const StyledWebCamera = styled(Webcam)`
   ${S.ImagesSize}
-  margin:0;
+
+  margin: 0;
   ${mediaQueries.xxl} {
     margin: 0;
   }
@@ -44,12 +45,16 @@ export const WebCamera = ({
   const webcamRef = React.useRef(null);
 
   const handleCapture = React.useCallback(() => {
+    const codedImage = webcamRef.current.getScreenshot();
     setImageSrc(webcamRef.current.getScreenshot());
-    fetch(imageSrc)
+    fetch(codedImage)
       .then((res) => res.blob())
-      .then((blob) => {
+      .then((res) => {
+        const fileName = new Date().getTime();
         setDecodedImage(
-          new File([blob], "Filename.jpg", { type: "image/jpg" })
+          new File([res], `${fileName}.jpg`, {
+            type: "image/jpg",
+          })
         );
       });
   }, [webcamRef]);
@@ -61,7 +66,7 @@ export const WebCamera = ({
 
   return webcamEnabled ? (
     <>
-      <StyledWebCamera ref={webcamRef} screenshotFormat="image/jpg" />
+      <StyledWebCamera ref={webcamRef} screenshotFormat="image/jpeg" />
       <ScreenshotButton onClick={handleCapture}>Capture photo</ScreenshotButton>
     </>
   ) : (
