@@ -7,6 +7,7 @@ import { UploadImageArea } from "./UploadImageArea";
 function Main() {
   const [successStatus, setSuccessStatus] = useState(null);
   const [failureStatus, setFailureStatus] = useState(null);
+  const [creasedStatus, setCreasedStatus] = useState(null);
   const criticalDamages =
     failureStatus &&
     Object.values(failureStatus.defects).find(({ is_critical }) => is_critical);
@@ -26,10 +27,12 @@ function Main() {
               <S.Status isGood={true}>{successStatus.state}</S.Status>
             )}
             {failureStatus && <S.Status>{failureStatus.state}</S.Status>}
+            {creasedStatus && <S.Status>{creasedStatus.state}</S.Status>}
           </S.StatusWrapper>
           <UploadImageArea
             setFailureStatus={setFailureStatus}
             setSuccessStatus={setSuccessStatus}
+            setCreasedStatus={setCreasedStatus}
           />
         </S.FirstColumn>
         <S.SecondColumn>

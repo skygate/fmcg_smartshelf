@@ -5,7 +5,11 @@ import { UploadMenu } from "./UploadMenu";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
 import { Loader } from "./Loader";
 
-export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
+export const UploadImageArea = ({
+  setSuccessStatus,
+  setFailureStatus,
+  setCreasedStatus,
+}) => {
   const [shouldHideGif, setShouldHideGif] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState(null);
   const [pictureWithDamage, setPictureWithDamage] = React.useState(null);
@@ -19,6 +23,7 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     setPictureWithDamage(null);
     setFailureStatus(null);
     setSuccessStatus(null);
+    setCreasedStatus(null);
     setIsWebCameraActive(false);
     setImageSrc(null);
     setUploadedImage(null);
@@ -41,6 +46,9 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
   const checkStatus = async (damagesList) => {
     if (damagesList.state === "good") {
       return setSuccessStatus(damagesList);
+    }
+    if (damagesList.state === "creased") {
+      return setCreasedStatus(damagesList);
     }
     setFailureStatus(damagesList);
     const picture = await getPictureWithDamage({
