@@ -17,7 +17,6 @@ from config import (
     RESOLUTION,
     MEAN,
     STD,
-    CRITICALITY_RATIO,
 )
 
 
@@ -34,7 +33,7 @@ class Runner:
         self.detector = Detector(self.opencv_image)
 
     def show_detections(self) -> None:
-        _, __, image, ___ = self.run()
+        _, image, __ = self.run()
 
         cv2.imshow("Image", image)
         cv2.waitKey(0)
@@ -42,29 +41,24 @@ class Runner:
 
     def run(
         self,
-    ) -> Tuple[str, str, np.ndarray, Optional[Dict[str, Dict[str, Union[str, bool]]]]]:
-        object_types = ["plate", "flat"]
-        object_classification_result = self.classifier.make_classification(
-            "object_classifier.pth", object_types
+    ) -> Tuple[str, np.ndarray, Optional[Dict[str, Dict[str, Union[str, bool]]]]]:
+        states = ["creased", "defective", "good"]
+        state_classification_result = self.classifier.make_classification(
+            "classifier.pth", states
         )
 
-        states = ["good", "defective"]
-        models = {
-            "plate": self.classifier.make_classification("plate_state.pth", states),
-            "flat": self.classifier.make_classification("flat_state.pth", states),
-        }
-        state_classification_result = models[object_classification_result]
-
-        # self.drawer.put_text(object_classification_result, state_classification_result)
-
-        defect_types = ["scratches", "recess"]
+        defect_types = [
+            "recess_critical",
+            "recess_non_critical",
+            "scratch_critical",
+            "scratch_non_critical",
+        ]
         defects = None
         if state_classification_result == "defective":
             bboxes, defects = self.detector.get_bboxes(defect_types)
             self.drawer.draw_bboxes(bboxes)
 
         return (
-            object_classification_result,
             state_classification_result,
             self.drawer.image,
             defects,
@@ -119,7 +113,6 @@ class Detector:
         self.confidences = None
         self.boxes = None
         self.classes = None
-        self.criticality_ratio = CRITICALITY_RATIO
 
     def get_bboxes(
         self, defect_types: List[str]
@@ -134,10 +127,10 @@ class Detector:
             idx = idx[0]
             x, y, w, h = self.boxes[idx]
             bbox = round(x), round(y), round(w), round(h)
-            is_critical = self._is_critical(bbox, self.classes[idx])
+            is_critical = self._is_critical(self.classes[idx])
             bboxes[bbox] = {"id": counter + 1, "is_critical": is_critical}
             defects[str(counter + 1)] = {
-                "defect_type": defect_types[self.classes[idx]],
+                "defect_type": defect_types[self.classes[idx]].split("_")[0],
                 "is_critical": is_critical,
             }
         return bboxes, defects
@@ -181,15 +174,8 @@ class Detector:
         layer_names = self.model.getLayerNames()
         return [layer_names[i[0] - 1] for i in self.model.getUnconnectedOutLayers()]
 
-    def _is_critical(self, bbox: Tuple[int, int, int, int], label: int) -> bool:
-        is_critical = False
-        if label == 1:
-            is_critical = True
-        else:
-            _, __, bbox_width, bbox_height = bbox
-            if bbox_width * bbox_height > self.criticality_ratio:
-                is_critical = True
-        return is_critical
+    def _is_critical(self, label: int) -> bool:
+        return True if label == 0 or label == 2 else False
 
 
 class Drawer:
@@ -199,27 +185,6 @@ class Drawer:
 
     def __init__(self, image: np.ndarray) -> None:
         self.image = cv2.resize(image, (1920, 1080))
-
-    def put_text(self, object_type: str, state: str) -> None:
-        cv2.putText(
-            self.image,
-            f"Object: {object_type}",
-            (10, 30),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            (0, 255, 255),
-            2,
-        )
-        color = (0, 255, 0) if state == "good" else (0, 0, 255)
-        cv2.putText(
-            self.image,
-            f"State: {state}",
-            (10, 75),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            color,
-            2,
-        )
 
     def draw_bboxes(
         self, bboxes: Dict[Tuple[int, int, int, int], Dict[str, bool]]
