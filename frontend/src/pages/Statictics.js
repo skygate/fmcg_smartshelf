@@ -20,7 +20,6 @@ const INITIAL_END_DAY = new Date("2020/03/01");
 function Statictics() {
   const [startDate, setStartDate] = React.useState(INITIAL_START_DAY);
   const [endDate, setEndDate] = React.useState(INITIAL_END_DAY);
-  const [incorrectTimeRange, setIncorrectTimeRange] = React.useState(false);
   const [categoryIndex, setCategoryIndex] = React.useState(0);
 
   const formatHighchartsOptions = (highchartsOptions, monthsBetween) => {
@@ -102,7 +101,6 @@ function Statictics() {
             onChange={(timeRange) => handleChange(timeRange)}
           />
         </S.DateSelectorWrapper>
-        {incorrectTimeRange && <h1>Incorrect time range</h1>}
         <S.StyledChart>{renderChart()}</S.StyledChart>
       </S.ChartWrapper>
     </>

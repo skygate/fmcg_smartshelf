@@ -14,22 +14,20 @@ const GlobalStyle = createGlobalStyle`
   
 `;
 
-export const Routes = ({}) => {
-  return (
-    <>
-      <GlobalStyle />
-      <BrowserRouter>
-        <Navigation />
-        <Switch>
-          <Route exact path={"/"}>
-            <Main />
-          </Route>
+export const Routes = () => (
+  <>
+    <GlobalStyle />
+    <BrowserRouter>
+      <Navigation />
+      <Switch>
+        <Route exact path={"/"}>
+          <Main />
+        </Route>
 
-          <Route exact path={"/statistics"}>
-            <Statistics />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-    </>
-  );
-};
+        <Route exact path={"/statistics"}>
+          <Statistics />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  </>
+);
