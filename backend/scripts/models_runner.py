@@ -48,7 +48,7 @@ class Runner:
             "classifier.pth", states
         )
 
-        defect_types = ["scratches", "recess"]
+        defect_types = ["recess_critical", "recess_non_critical", "scratch_critical", "scratch_non_critical"]
         defects = None
         if state_classification_result == "defective":
             bboxes, defects = self.detector.get_bboxes(defect_types)
@@ -109,7 +109,6 @@ class Detector:
         self.confidences = None
         self.boxes = None
         self.classes = None
-        self.criticality_ratio = CRITICALITY_RATIO
 
     def get_bboxes(
         self, defect_types: List[str]
@@ -124,7 +123,7 @@ class Detector:
             idx = idx[0]
             x, y, w, h = self.boxes[idx]
             bbox = round(x), round(y), round(w), round(h)
-            is_critical = self._is_critical(bbox, self.classes[idx])
+            is_critical = self._is_critical(self.classes[idx])
             bboxes[bbox] = {"id": counter + 1, "is_critical": is_critical}
             defects[str(counter + 1)] = {
                 "defect_type": defect_types[self.classes[idx]],
@@ -171,15 +170,8 @@ class Detector:
         layer_names = self.model.getLayerNames()
         return [layer_names[i[0] - 1] for i in self.model.getUnconnectedOutLayers()]
 
-    def _is_critical(self, bbox: Tuple[int, int, int, int], label: int) -> bool:
-        is_critical = False
-        if label == 1:
-            is_critical = True
-        else:
-            _, __, bbox_width, bbox_height = bbox
-            if bbox_width * bbox_height > self.criticality_ratio:
-                is_critical = True
-        return is_critical
+    def _is_critical(self, label: int) -> bool:
+        return True if label == 0 or label == 2 else False
 
 
 class Drawer:
