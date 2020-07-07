@@ -46,21 +46,34 @@ export const UploadImageArea = ({ setSuccessStatus, setFailureStatus }) => {
     },
   };
 
-  const handleDetection = async (imageToDiagnoze) => {
-    setHideGif(true);
-    const data = new FormData();
-    data.append("file", imageToDiagnoze);
+  const activateGif = () =>
     setTimeout(() => {
       setHideGif(false);
     }, 2000);
-    const response = await getStatus(data);
-    if (response.state === "good") {
-      return setSuccessStatus(response);
+
+  const getDagamesList = (imageToDiagnoze) => {
+    const data = new FormData();
+    data.append("file", imageToDiagnoze);
+    return getStatus(data);
+  };
+
+  const checkStatus = async (damagesList) => {
+    if (damagesList.state === "good") {
+      return setSuccessStatus(damagesList);
     }
-    setFailureStatus(response);
-    const picture = await getPictureWithDamage({ filename: response.filename });
+    setFailureStatus(damagesList);
+    const picture = await getPictureWithDamage({
+      filename: damagesList.filename,
+    });
     const objectURL = URL.createObjectURL(picture);
     setPictureWithDamage(objectURL);
+  };
+
+  const handleDetection = async (imageToDiagnoze) => {
+    setHideGif(true);
+    activateGif();
+    const damagesList = await getDagamesList(imageToDiagnoze);
+    checkStatus(damagesList);
   };
 
   const handleReset = () => {
