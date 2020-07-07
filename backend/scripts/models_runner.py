@@ -33,7 +33,7 @@ class Runner:
         self.detector = Detector(self.opencv_image)
 
     def show_detections(self) -> None:
-        _, __, image, ___ = self.run()
+        _, image, __ = self.run()
 
         cv2.imshow("Image", image)
         cv2.waitKey(0)
