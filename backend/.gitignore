@@ -1,1 +1,10 @@
+.idea/
+__pycache__/
+venv/
+
 *.json
+*.jpg
+*.JPG
+*.pth
+*.cfg
+*.weights

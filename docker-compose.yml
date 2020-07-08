@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  backend:
+    container_name: backend-air-motor-poc
+    build:
+      context: ./backend
+      dockerfile: ./app/Dockerfile
+    restart: unless-stopped
+    command: bash -c "python run_flask.py"
+    ports:
+      - 5000:5000
+
+  frontend:
+    container_name: frontend-air-motor-poc
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    stdin_open: true
+    ports:
+      - 3000:3000

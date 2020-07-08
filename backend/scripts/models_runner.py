@@ -32,13 +32,6 @@ class Runner:
         self.drawer = Drawer(self.opencv_image)
         self.detector = Detector(self.opencv_image)
 
-    def show_detections(self) -> None:
-        _, image, __ = self.run()
-
-        cv2.imshow("Image", image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
     def run(
         self,
     ) -> Tuple[str, np.ndarray, Optional[Dict[str, Dict[str, Union[str, bool]]]]]:
