@@ -1,4 +1,4 @@
-const url = "http://localhost:5000";
+const url = "https://app-air-motor-poc:5000";
 
 export const getStatus = (picture) =>
   fetch(`${url}/run`, {
