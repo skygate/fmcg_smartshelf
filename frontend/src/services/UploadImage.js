@@ -1,4 +1,4 @@
-const url = "https://app-air-motor-poc.hal.skygate.io";
+const url = "https://localhost:5000";
 
 export const getStatus = (picture) =>
   fetch(`${url}/run`, {
