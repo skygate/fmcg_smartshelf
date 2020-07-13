@@ -199,3 +199,12 @@ class Drawer:
                 color,
                 3,
             )
+
+
+class ClassActivationMapper:
+    """
+    Class that generates Class Activation Map (CAM)
+    """
+
+    def __init__(self) -> None:
+        pass
