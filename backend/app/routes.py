@@ -42,4 +42,3 @@ def get_detections():
         return jsonify({"status": "File name can't be empty"})
 
     return send_from_directory(UPLOAD_FOLDER, filename)
-
