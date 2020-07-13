@@ -27,10 +27,10 @@ def run():
         return jsonify({"status": "File must be an image!"}), 400
 
     runner = Runner(image)
-    state, image_with_bboxes, defects = runner.run()
+    state, processed_image, defects = runner.run()
 
     upload_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    cv2.imwrite(upload_path, image_with_bboxes)
+    cv2.imwrite(upload_path, processed_image)
 
     return jsonify({"state": state, "defects": defects, "filename": file.filename})
 
