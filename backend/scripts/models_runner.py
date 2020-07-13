@@ -7,6 +7,8 @@ import numpy as np
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
+from gradcam import GradCAMpp
+from gradcam.utils import visualize_cam
 from torch.autograd import Variable
 from torchvision.models import ResNet
 
@@ -31,6 +33,7 @@ class Runner:
         self.classifier = Classifier(self.pil_image)
         self.drawer = Drawer(self.opencv_image)
         self.detector = Detector(self.opencv_image)
+        self.mapper = ClassActivationMapper(self.pil_image)
 
     def run(
         self,
@@ -47,13 +50,17 @@ class Runner:
             "scratch_non_critical",
         ]
         defects = None
+        image = self.drawer.image
         if state_classification_result == "defective":
             bboxes, defects = self.detector.get_bboxes(defect_types)
             self.drawer.draw_bboxes(bboxes)
+            image = self.drawer.image
+        elif state_classification_result == "creased":
+            image = self.mapper.get_class_activation_map("classifier.pth")
 
         return (
             state_classification_result,
-            self.drawer.image,
+            image,
             defects,
         )
 
@@ -203,8 +210,37 @@ class Drawer:
 
 class ClassActivationMapper:
     """
-    Class that generates Class Activation Map (CAM)
+    Class that creates Class Activation Map (CAM)
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, image: PIL.Image) -> None:
+        self.device: torch.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() else "cpu"
+        )
+        self.image = image
+        self.image_tensor = self._convert_image_to_tensor()
+        self.image_normalized = self._normalize_image()
+
+    def _convert_image_to_tensor(self) -> torch.Tensor:
+        compose_transforms = [transforms.Resize(RESOLUTION), transforms.ToTensor()]
+        return transforms.Compose(compose_transforms)(self.image)
+
+    def _normalize_image(self) -> torch.Tensor:
+        return transforms.Normalize(np.asarray(MEAN), np.asarray(STD))(
+            self.image_tensor
+        )[None]
+
+    def get_class_activation_map(self, model_name: str) -> np.ndarray:
+        model: ResNet = torch.load(
+            os.path.join(CLASSIFIERS_PATH, model_name), map_location=self.device
+        )
+        model.to(self.device).eval()
+        target_layer = model._modules.get("layer4")
+        gradcam = GradCAMpp(model, target_layer)
+        mask, _ = gradcam(self.image_normalized)
+        heatmap, result = visualize_cam(mask, self.image_tensor)
+
+        image = torch.squeeze(result)
+        image = transforms.ToPILImage()(image)
+        opencv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+        return cv2.resize(opencv_image, self.image.size)
