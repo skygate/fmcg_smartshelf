@@ -240,7 +240,10 @@ class ClassActivationMapper:
         mask, _ = gradcam(self.image_normalized)
         heatmap, result = visualize_cam(mask, self.image_tensor)
 
-        image = torch.squeeze(result)
-        image = transforms.ToPILImage()(image)
-        opencv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-        return cv2.resize(opencv_image, self.image.size)
+        heatmap = torch.squeeze(heatmap)
+        heatmap = transforms.ToPILImage()(heatmap)
+        heatmap = cv2.cvtColor(np.array(heatmap), cv2.COLOR_RGB2BGR)
+        heatmap = cv2.resize(heatmap, self.image.size)
+
+        image = cv2.cvtColor(np.array(self.image), cv2.COLOR_RGB2BGR)
+        return cv2.addWeighted(image, 0.75, heatmap, 0.25, 0.0)
