@@ -10,9 +10,12 @@ function Main() {
   const [creasedStatus, setCreasedStatus] = useState(null);
   const criticalDamages =
     failureStatus &&
+    failureStatus.defects &&
     Object.values(failureStatus.defects).find(({ is_critical }) => is_critical);
+
   const noDamages =
     failureStatus &&
+    failureStatus.defects &&
     Object.values(failureStatus.defects).find(
       ({ is_critical }) => !is_critical
     );
@@ -36,7 +39,7 @@ function Main() {
           />
         </S.FirstColumn>
         <S.SecondColumn>
-          {failureStatus && (
+          {failureStatus && failureStatus.defects && (
             <S.ColumnsWrapper>
               <S.ColumnsWrapper>
                 {criticalDamages && (

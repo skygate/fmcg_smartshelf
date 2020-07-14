@@ -43,19 +43,24 @@ export const UploadImageArea = ({
     return getStatus(data);
   };
 
+  const getPictureWithDamages = async (damagesList) => {
+    const picture = await getPictureWithDamage({
+      filename: damagesList.filename,
+    });
+    const objectURL = URL.createObjectURL(picture);
+    return setPictureWithDamage(objectURL);
+  };
+
   const checkStatus = async (damagesList) => {
     if (damagesList.state === "good") {
       return setSuccessStatus(damagesList);
     }
     if (damagesList.state === "creased") {
-      return setCreasedStatus(damagesList);
+      setCreasedStatus(damagesList);
+      return getPictureWithDamages(damagesList);
     }
     setFailureStatus(damagesList);
-    const picture = await getPictureWithDamage({
-      filename: damagesList.filename,
-    });
-    const objectURL = URL.createObjectURL(picture);
-    setPictureWithDamage(objectURL);
+    getPictureWithDamages(damagesList);
   };
 
   const handleDetection = async (imageToDiagnoze) => {

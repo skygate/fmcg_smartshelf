@@ -42,7 +42,7 @@ export const UploadMenu = ({
       <S.SymbolSectionWrapper>
         {!isWebCameraActive && (
           <S.ColumnsWrapper>
-            <S.UploadSymbol src="Upload.svg" />
+            <S.UploadSymbol src="upload.svg" />
             <S.UploadAndtWrapper {...uploadProps}>
               <Button>
                 <UploadOutlined /> Click to Upload
