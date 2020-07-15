@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 
 import Main from "../pages/Main/Main";
 import Statistics from "../pages/Statictics";
-import { ReportContextProvider } from "../hooks/ReportContext";
+import { ReportContextProvider } from "../context/ReportContext";
 import { Navigation } from "../components/Navigation";
 import { fontFamily } from "../styles/variable";
 

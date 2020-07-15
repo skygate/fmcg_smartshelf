@@ -4,9 +4,9 @@ import { PictureWithDamage } from "./PictureWithDamage";
 import { UploadMenu } from "./UploadMenu";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
 import { Loader } from "./Loader";
-import { STATUSES } from "../../hooks/ReportContext";
-import { ReportContext } from "../../hooks/ReportContext";
-import { initialState } from "../../hooks/initialState";
+import { STATUSES } from "../../context/ReportContext";
+import { ReportContext } from "../../context/ReportContext";
+import { initialState } from "../../context/initialState";
 
 export const UploadImageArea = () => {
   const [shouldHideGif, setShouldHideGif] = React.useState(false);
