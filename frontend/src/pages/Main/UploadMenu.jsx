@@ -9,13 +9,12 @@ import { getBase64 } from "../../helpers/FileToBase64";
 export const UploadMenu = ({
   isWebCameraActive,
   setImageSrc,
-  imageSrc,
   setUploadedImage,
   setImagePreviewState,
   setIsWebCameraActive,
   setDecodedImage,
 }) => {
-  const uploadProps = {
+  const uploaderProps = {
     name: "file",
     accept: ".jpg,.png",
     customRequest: ({ onSuccess }) => {
@@ -43,7 +42,7 @@ export const UploadMenu = ({
         {!isWebCameraActive && (
           <S.ColumnsWrapper>
             <S.UploadSymbol src="upload.svg" />
-            <S.UploadAndtWrapper {...uploadProps}>
+            <S.UploadAndtWrapper {...uploaderProps}>
               <Button>
                 <UploadOutlined /> Click to Upload
               </Button>
@@ -55,6 +54,7 @@ export const UploadMenu = ({
             setIsWebCameraActive={setIsWebCameraActive}
             setDecodedImage={setDecodedImage}
             setImageSrc={setImageSrc}
+            isWebCameraActive={isWebCameraActive}
           />
         </S.ColumnsWrapper>
       </S.SymbolSectionWrapper>

@@ -49,8 +49,8 @@ export const WebCamera = ({
   setIsWebCameraActive,
   setImageSrc,
   setDecodedImage,
+  isWebCameraActive,
 }) => {
-  const [webcamEnabled, setWebcamEnabled] = React.useState(false);
   const webcamRef = React.useRef(null);
 
   const handleCapture = React.useCallback(() => {
@@ -62,12 +62,7 @@ export const WebCamera = ({
     decodeBase64(encodedImage, setDecodedImage);
   }, [webcamRef]);
 
-  const handleEnableWebcam = () => {
-    setIsWebCameraActive(true);
-    setWebcamEnabled(true);
-  };
-
-  return webcamEnabled ? (
+  return isWebCameraActive ? (
     <>
       <StyledWebCamera ref={webcamRef} screenshotFormat="image/jpeg" />
       <ScreenshotButton onClick={handleCapture}>Capture photo</ScreenshotButton>
@@ -75,7 +70,9 @@ export const WebCamera = ({
   ) : (
     <CameraWrapper>
       <S.UploadSymbol src="Camera.svg" />
-      <CameraButton onClick={handleEnableWebcam}>Enable webcam</CameraButton>
+      <CameraButton onClick={() => setIsWebCameraActive(true)}>
+        Enable webcam
+      </CameraButton>
     </CameraWrapper>
   );
 };

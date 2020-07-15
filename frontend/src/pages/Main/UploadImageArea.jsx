@@ -4,12 +4,11 @@ import { PictureWithDamage } from "./PictureWithDamage";
 import { UploadMenu } from "./UploadMenu";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
 import { Loader } from "./Loader";
+import { STATUSES } from "../../hooks/ReportContext";
+import { ReportContext } from "../../hooks/ReportContext";
+import { initialState } from "../../hooks/initialState";
 
-export const UploadImageArea = ({
-  setSuccessStatus,
-  setFailureStatus,
-  setCreasedStatus,
-}) => {
+export const UploadImageArea = () => {
   const [shouldHideGif, setShouldHideGif] = React.useState(false);
   const [uploadedImage, setUploadedImage] = React.useState(null);
   const [pictureWithDamage, setPictureWithDamage] = React.useState(null);
@@ -17,17 +16,16 @@ export const UploadImageArea = ({
   const [isWebCameraActive, setIsWebCameraActive] = React.useState(false);
   const [decodedImage, setDecodedImage] = React.useState(null);
   const [imageSrc, setImageSrc] = React.useState(null);
+  const { report, setReport } = React.useContext(ReportContext);
 
   const handleReset = () => {
     setImagePreviewState(null);
     setPictureWithDamage(null);
-    setFailureStatus(null);
-    setSuccessStatus(null);
-    setCreasedStatus(null);
     setIsWebCameraActive(false);
     setImageSrc(null);
     setUploadedImage(null);
     setDecodedImage(null);
+    setReport(initialState);
   };
 
   const activateGif = () => {
@@ -43,7 +41,7 @@ export const UploadImageArea = ({
     return getStatus(data);
   };
 
-  const getPictureWithDamages = async (damagesList) => {
+  const getPictureWithMarkedDamages = async (damagesList) => {
     const picture = await getPictureWithDamage({
       filename: damagesList.filename,
     });
@@ -51,22 +49,18 @@ export const UploadImageArea = ({
     return setPictureWithDamage(objectURL);
   };
 
-  const checkStatus = async (damagesList) => {
-    if (damagesList.state === "good") {
-      return setSuccessStatus(damagesList);
+  const checkStatuses = async (damagesList) => {
+    setReport(damagesList);
+    if (damagesList.state === STATUSES.SUCCESS) {
+      return;
     }
-    if (damagesList.state === "creased") {
-      setCreasedStatus(damagesList);
-      return getPictureWithDamages(damagesList);
-    }
-    setFailureStatus(damagesList);
-    getPictureWithDamages(damagesList);
+    getPictureWithMarkedDamages(damagesList);
   };
 
   const handleDetection = async (imageToDiagnoze) => {
     activateGif();
     const damagesList = await getDagamesList(imageToDiagnoze);
-    checkStatus(damagesList);
+    checkStatuses(damagesList);
   };
 
   if (pictureWithDamage) {
