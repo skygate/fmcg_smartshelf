@@ -3,6 +3,7 @@ import "antd/dist/antd.css";
 
 import * as S from "../../components/MainPage";
 import { UploadImageArea } from "./UploadImageArea";
+import { findCriticalElements } from "../../helpers/FindCriticalElements";
 import { STATUSES } from "../../constants";
 import { ReportContext } from "../../context/ReportContext";
 
@@ -10,12 +11,10 @@ function Main() {
   const { report } = React.useContext(ReportContext);
 
   const criticalDamages =
-    report.defects &&
-    Object.values(report.defects).find(({ is_critical }) => is_critical);
+    report.defects && findCriticalElements(report.defects, true);
 
   const noDamages =
-    report.defects &&
-    Object.values(report.defects).find(({ is_critical }) => !is_critical);
+    report.defects && findCriticalElements(report.defects, false);
 
   return (
     <S.PageWrapper>
