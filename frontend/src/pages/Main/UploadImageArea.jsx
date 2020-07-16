@@ -46,7 +46,6 @@ export const UploadImageArea = () => {
   };
 
   const checkStatuses = async (damagesList) => {
-    console.log(damagesList);
     setReport(damagesList);
     if (damagesList.state === STATUSES.SUCCESS) {
       return;
