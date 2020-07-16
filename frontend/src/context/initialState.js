@@ -1,5 +1,5 @@
 export const initialState = {
-  report: {
-    status: "",
-  },
+  state: "",
+  filename: "",
+  defects: {},
 };
