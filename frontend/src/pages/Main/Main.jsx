@@ -39,11 +39,11 @@ function Main() {
                 )}
                 {Object.entries(report.defects).map(
                   ([key, values]) =>
-                    values.is_critical && (
+                    values.isCritical && (
                       <S.ListRowsWrapper key={key}>
                         <S.Number isCritical={true}>{key}</S.Number>
                         <S.Element isCritical={true}>
-                          {values.defect_type}
+                          {values.defectType}
                         </S.Element>
                       </S.ListRowsWrapper>
                     )
@@ -51,10 +51,10 @@ function Main() {
                 {noDamages && <S.TableStatus>CHECK</S.TableStatus>}
                 {Object.entries(report.defects).map(
                   ([key, values]) =>
-                    !values.is_critical && (
+                    !values.isCritical && (
                       <S.ListRowsWrapper key={key}>
                         <S.Number>{key}</S.Number>
-                        <S.Element>{values.defect_type}</S.Element>
+                        <S.Element>{values.defectType}</S.Element>
                       </S.ListRowsWrapper>
                     )
                 )}

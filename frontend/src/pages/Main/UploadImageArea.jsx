@@ -1,4 +1,5 @@
 import React from "react";
+import camelcaseKeys from "camelcase-keys";
 
 import { PictureWithDamage } from "./PictureWithDamage";
 import { UploadMenu } from "./UploadMenu";
@@ -46,7 +47,7 @@ export const UploadImageArea = () => {
   };
 
   const checkStatuses = async (damagesList) => {
-    setReport(damagesList);
+    setReport(camelcaseKeys(damagesList, { deep: true }));
     if (damagesList.state === STATUSES.SUCCESS) {
       return;
     }
