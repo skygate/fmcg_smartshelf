@@ -4,6 +4,7 @@ import { createGlobalStyle } from "styled-components";
 
 import Main from "../pages/Main/Main";
 import Statistics from "../pages/Statictics";
+import { ReportContextProvider } from "../context/ReportContext";
 import { Navigation } from "../components/Navigation";
 import { fontFamily } from "../styles/variable";
 
@@ -16,18 +17,20 @@ const GlobalStyle = createGlobalStyle`
 
 export const Routes = () => (
   <>
-    <GlobalStyle />
-    <BrowserRouter>
-      <Navigation />
-      <Switch>
-        <Route exact path={"/"}>
-          <Main />
-        </Route>
+    <ReportContextProvider>
+      <GlobalStyle />
+      <BrowserRouter>
+        <Navigation />
+        <Switch>
+          <Route exact path={"/"}>
+            <Main />
+          </Route>
 
-        <Route exact path={"/statistics"}>
-          <Statistics />
-        </Route>
-      </Switch>
-    </BrowserRouter>
+          <Route exact path={"/statistics"}>
+            <Statistics />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </ReportContextProvider>
   </>
 );

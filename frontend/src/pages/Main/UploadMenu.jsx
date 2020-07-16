@@ -8,14 +8,11 @@ import { getBase64 } from "../../helpers/FileToBase64";
 
 export const UploadMenu = ({
   isWebCameraActive,
-  setImageSrc,
-  imageSrc,
-  setUploadedImage,
-  setImagePreviewState,
+  setImageToDetect,
+  setImageToDisplay,
   setIsWebCameraActive,
-  setDecodedImage,
 }) => {
-  const uploadProps = {
+  const uploaderProps = {
     name: "file",
     accept: ".jpg,.png",
     customRequest: ({ onSuccess }) => {
@@ -29,8 +26,8 @@ export const UploadMenu = ({
     async onChange(info) {
       if (info.file.status === "done") {
         message.success(`${info.file.name} file uploaded successfully`);
-        setImagePreviewState(await getBase64(info.file.originFileObj));
-        setUploadedImage(info.file.originFileObj);
+        setImageToDisplay(await getBase64(info.file.originFileObj));
+        setImageToDetect(info.file.originFileObj);
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -43,7 +40,7 @@ export const UploadMenu = ({
         {!isWebCameraActive && (
           <S.ColumnsWrapper>
             <S.UploadSymbol src="upload.svg" />
-            <S.UploadAndtWrapper {...uploadProps}>
+            <S.UploadAndtWrapper {...uploaderProps}>
               <Button>
                 <UploadOutlined /> Click to Upload
               </Button>
@@ -53,8 +50,9 @@ export const UploadMenu = ({
         <S.ColumnsWrapper>
           <WebCamera
             setIsWebCameraActive={setIsWebCameraActive}
-            setDecodedImage={setDecodedImage}
-            setImageSrc={setImageSrc}
+            setImageToDetect={setImageToDetect}
+            isWebCameraActive={isWebCameraActive}
+            setImageToDisplay={setImageToDisplay}
           />
         </S.ColumnsWrapper>
       </S.SymbolSectionWrapper>

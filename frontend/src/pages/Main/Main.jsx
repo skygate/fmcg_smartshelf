@@ -1,24 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import "antd/dist/antd.css";
 
 import * as S from "../../components/MainPage";
 import { UploadImageArea } from "./UploadImageArea";
+import { findElementsWithCondition } from "../../helpers/FindElementsWithCondition";
+import { STATUSES } from "../../constants";
+import { ReportContext } from "../../context/ReportContext";
 
 function Main() {
-  const [successStatus, setSuccessStatus] = useState(null);
-  const [failureStatus, setFailureStatus] = useState(null);
-  const [creasedStatus, setCreasedStatus] = useState(null);
+  const { report } = React.useContext(ReportContext);
+
   const criticalDamages =
-    failureStatus &&
-    failureStatus.defects &&
-    Object.values(failureStatus.defects).find(({ is_critical }) => is_critical);
+    report.defects && findElementsWithCondition(report.defects, true);
 
   const noDamages =
-    failureStatus &&
-    failureStatus.defects &&
-    Object.values(failureStatus.defects).find(
-      ({ is_critical }) => !is_critical
-    );
+    report.defects && findElementsWithCondition(report.defects, false);
 
   return (
     <S.PageWrapper>
@@ -26,44 +22,39 @@ function Main() {
         <S.FirstColumn>
           <S.StatusWrapper>
             <S.StatusTitle>STATUS</S.StatusTitle>
-            {successStatus && (
-              <S.Status isGood={true}>{successStatus.state}</S.Status>
+            {report.state && (
+              <S.Status isGood={report.state === STATUSES.SUCCESS}>
+                {report.state}
+              </S.Status>
             )}
-            {failureStatus && <S.Status>{failureStatus.state}</S.Status>}
-            {creasedStatus && <S.Status>{creasedStatus.state}</S.Status>}
           </S.StatusWrapper>
-          <UploadImageArea
-            setFailureStatus={setFailureStatus}
-            setSuccessStatus={setSuccessStatus}
-            setCreasedStatus={setCreasedStatus}
-          />
+          <UploadImageArea />
         </S.FirstColumn>
         <S.SecondColumn>
-          {failureStatus && failureStatus.defects && (
+          {report?.defects && (
             <S.ColumnsWrapper>
               <S.ColumnsWrapper>
                 {criticalDamages && (
                   <S.TableStatus isCritical={true}>CRITICAL</S.TableStatus>
                 )}
-                {Object.entries(failureStatus.defects).map(
+                {Object.entries(report.defects).map(
                   ([key, values]) =>
-                    values.is_critical && (
+                    values.isCritical && (
                       <S.ListRowsWrapper key={key}>
                         <S.Number isCritical={true}>{key}</S.Number>
                         <S.Element isCritical={true}>
-                          {values.defect_type}
+                          {values.defectType}
                         </S.Element>
                       </S.ListRowsWrapper>
                     )
                 )}
-
                 {noDamages && <S.TableStatus>CHECK</S.TableStatus>}
-                {Object.entries(failureStatus.defects).map(
+                {Object.entries(report.defects).map(
                   ([key, values]) =>
-                    !values.is_critical && (
+                    !values.isCritical && (
                       <S.ListRowsWrapper key={key}>
                         <S.Number>{key}</S.Number>
-                        <S.Element>{values.defect_type}</S.Element>
+                        <S.Element>{values.defectType}</S.Element>
                       </S.ListRowsWrapper>
                     )
                 )}
