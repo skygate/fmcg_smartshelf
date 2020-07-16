@@ -10,11 +10,11 @@ function Main() {
   const { report } = React.useContext(ReportContext);
 
   const criticalDamages =
-    report?.defects &&
+    report.defects &&
     Object.values(report.defects).find(({ is_critical }) => is_critical);
 
   const noDamages =
-    report?.defects &&
+    report.defects &&
     Object.values(report.defects).find(({ is_critical }) => !is_critical);
 
   return (
