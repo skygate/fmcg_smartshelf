@@ -4,7 +4,7 @@ import { PictureWithDamage } from "./PictureWithDamage";
 import { UploadMenu } from "./UploadMenu";
 import { getStatus, getPictureWithDamage } from "../../services/UploadImage";
 import { Loader } from "./Loader";
-import { STATUSES } from "../../context/ReportContext";
+import { STATUSES } from "../../constants";
 import { ReportContext } from "../../context/ReportContext";
 import { initialState } from "../../context/initialState";
 

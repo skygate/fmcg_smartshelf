@@ -146,3 +146,9 @@ export const highchartsDefaultOptions = {
     reversed: true,
   },
 };
+
+export const STATUSES = {
+  SUCCESS: "good",
+  CREASED: "creased",
+  FAILURE: "defective",
+};

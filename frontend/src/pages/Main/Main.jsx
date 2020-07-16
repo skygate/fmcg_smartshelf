@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 
 import * as S from "../../components/MainPage";
 import { UploadImageArea } from "./UploadImageArea";
-import { STATUSES } from "../../context/ReportContext";
+import { STATUSES } from "../../constants";
 import { ReportContext } from "../../context/ReportContext";
 
 function Main() {
