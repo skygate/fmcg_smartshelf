@@ -1,5 +1,4 @@
 import React from "react";
-import { useState, createContext } from "react";
 import { initialState } from "./initialState";
 
 const ReportContext = React.createContext();
@@ -11,7 +10,7 @@ const STATUSES = {
 };
 
 const ReportContextProvider = ({ children }) => {
-  const [report, setReport] = useState(initialState);
+  const [report, setReport] = React.useState(initialState);
   const value = { report, setReport };
   return (
     <ReportContext.Provider value={value}>{children}</ReportContext.Provider>
