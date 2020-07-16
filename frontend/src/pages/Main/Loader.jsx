@@ -6,10 +6,8 @@ export const Loader = ({
   shouldHideGif,
   handleDetection,
   handleReset,
-  imagePreviewState,
-  imageSrc,
-  uploadedImage,
-  decodedImage,
+  imageToDisplay,
+  imageToDetect,
 }) => (
   <S.ColumnsWrapper>
     {shouldHideGif ? (
@@ -17,13 +15,11 @@ export const Loader = ({
         <S.GifWrapper src={"loader.gif"} isActive={!shouldHideGif} />
       </S.LoaderWrapper>
     ) : (
-      <S.ResultImage src={imagePreviewState || imageSrc} />
+      <S.ResultImage src={imageToDisplay} />
     )}
     <S.ButtonsWrapper>
       <S.ResetButton onClick={handleReset}>Reset</S.ResetButton>
-      <S.DetectButton
-        onClick={() => handleDetection(uploadedImage || decodedImage)}
-      >
+      <S.DetectButton onClick={() => handleDetection(imageToDetect)}>
         Run detection
       </S.DetectButton>
     </S.ButtonsWrapper>

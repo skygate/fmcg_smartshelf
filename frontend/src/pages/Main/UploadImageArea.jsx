@@ -10,21 +10,17 @@ import { initialState } from "../../context/initialState";
 
 export const UploadImageArea = () => {
   const [shouldHideGif, setShouldHideGif] = React.useState(false);
-  const [uploadedImage, setUploadedImage] = React.useState(null);
+  const [imageToDetect, setImageToDetect] = React.useState(null);
   const [pictureWithDamage, setPictureWithDamage] = React.useState(null);
-  const [imagePreviewState, setImagePreviewState] = React.useState(null);
+  const [imageToDisplay, setImageToDisplay] = React.useState(null);
   const [isWebCameraActive, setIsWebCameraActive] = React.useState(false);
-  const [decodedImage, setDecodedImage] = React.useState(null);
-  const [imageSrc, setImageSrc] = React.useState(null);
-  const { report, setReport } = React.useContext(ReportContext);
+  const { setReport } = React.useContext(ReportContext);
 
   const handleReset = () => {
-    setImagePreviewState(null);
+    setImageToDisplay(null);
     setPictureWithDamage(null);
     setIsWebCameraActive(false);
-    setImageSrc(null);
-    setUploadedImage(null);
-    setDecodedImage(null);
+    setImageToDetect(null);
     setReport(initialState);
   };
 
@@ -50,6 +46,7 @@ export const UploadImageArea = () => {
   };
 
   const checkStatuses = async (damagesList) => {
+    console.log(damagesList);
     setReport(damagesList);
     if (damagesList.state === STATUSES.SUCCESS) {
       return;
@@ -72,28 +69,23 @@ export const UploadImageArea = () => {
     );
   }
 
-  if (imagePreviewState || imageSrc) {
+  if (imageToDisplay) {
     return (
       <Loader
         shouldHideGif={shouldHideGif}
         handleReset={handleReset}
         handleDetection={handleDetection}
-        imagePreviewState={imagePreviewState}
-        imageSrc={imageSrc}
-        uploadedImage={uploadedImage}
-        decodedImage={decodedImage}
+        imageToDisplay={imageToDisplay}
+        imageToDetect={imageToDetect}
       />
     );
   }
   return (
     <UploadMenu
       isWebCameraActive={isWebCameraActive}
-      setImageSrc={setImageSrc}
-      imageSrc={imageSrc}
-      setUploadedImage={setUploadedImage}
-      setImagePreviewState={setImagePreviewState}
+      setImageToDetect={setImageToDetect}
+      setImageToDisplay={setImageToDisplay}
       setIsWebCameraActive={setIsWebCameraActive}
-      setDecodedImage={setDecodedImage}
     />
   );
 };

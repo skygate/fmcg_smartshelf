@@ -47,8 +47,8 @@ const ScreenshotButton = styled.button`
 
 export const WebCamera = ({
   setIsWebCameraActive,
-  setImageSrc,
-  setDecodedImage,
+  setImageToDisplay,
+  setImageToDetect,
   isWebCameraActive,
 }) => {
   const webcamRef = React.useRef(null);
@@ -58,8 +58,8 @@ export const WebCamera = ({
       width: 1920,
       height: 1080,
     });
-    setImageSrc(webcamRef.current.getScreenshot());
-    decodeBase64(encodedImage, setDecodedImage);
+    setImageToDisplay(webcamRef.current.getScreenshot());
+    decodeBase64(encodedImage, setImageToDetect);
   }, [webcamRef]);
 
   return isWebCameraActive ? (
