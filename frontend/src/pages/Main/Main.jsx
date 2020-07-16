@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 
 import * as S from "../../components/MainPage";
 import { UploadImageArea } from "./UploadImageArea";
-import { findCriticalElements } from "../../helpers/FindCriticalElements";
+import { findElementsWithCondition } from "../../helpers/FindElementsWithCondition";
 import { STATUSES } from "../../constants";
 import { ReportContext } from "../../context/ReportContext";
 
@@ -11,10 +11,10 @@ function Main() {
   const { report } = React.useContext(ReportContext);
 
   const criticalDamages =
-    report.defects && findCriticalElements(report.defects, true);
+    report.defects && findElementsWithCondition(report.defects, true);
 
   const noDamages =
-    report.defects && findCriticalElements(report.defects, false);
+    report.defects && findElementsWithCondition(report.defects, false);
 
   return (
     <S.PageWrapper>
