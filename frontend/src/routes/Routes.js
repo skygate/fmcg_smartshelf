@@ -4,6 +4,7 @@ import { createGlobalStyle } from "styled-components";
 
 import Main from "../pages/Main/Main";
 import Statistics from "../pages/Statictics";
+import ErrorPage from "../pages/ErrorPage";
 import { ReportContextProvider } from "../context/ReportContext";
 import { Navigation } from "../components/Navigation";
 import { fontFamily } from "../styles/variable";
@@ -28,6 +29,10 @@ export const Routes = () => (
 
           <Route exact path={"/statistics"}>
             <Statistics />
+          </Route>
+
+          <Route>
+            <ErrorPage />
           </Route>
         </Switch>
       </BrowserRouter>
