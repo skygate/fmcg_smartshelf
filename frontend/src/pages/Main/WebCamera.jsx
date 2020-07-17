@@ -54,13 +54,14 @@ export const WebCamera = ({
   const webcamRef = React.useRef(null);
 
   const handleCapture = React.useCallback(() => {
-    const encodedImage = webcamRef.current.getScreenshot({
+    const webcam = webcamRef.current;
+    const encodedImage = webcam.getScreenshot({
       width: 1920,
       height: 1080,
     });
-    setImageToDisplay(webcamRef.current.getScreenshot());
+    setImageToDisplay(webcam.getScreenshot());
     decodeBase64(encodedImage, setImageToDetect);
-  }, [webcamRef]);
+  }, [webcamRef, setImageToDisplay, setImageToDetect]);
 
   return isWebCameraActive ? (
     <>
