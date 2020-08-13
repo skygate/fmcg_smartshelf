@@ -21,18 +21,15 @@ def run():
     if not file:
         return jsonify({"status": "File can't be empty."}), 400
 
-    try:
+    try:        
         image = Image.open(file)
     except IOError:
         return jsonify({"status": "File must be an image!"}), 400
 
     runner = Runner(image)
-    state, processed_image, defects = runner.run()
+    result = runner.run()
 
-    upload_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    cv2.imwrite(upload_path, processed_image)
-
-    return jsonify({"state": state, "defects": defects, "filename": file.filename})
+    return jsonify({"result": result})
 
 
 @api.route("/get_detections", methods=["POST"])

@@ -59,14 +59,14 @@ export const UploadImageArea = () => {
     checkStatuses(damagesList);
   };
 
-  if (pictureWithDamage) {
-    return (
-      <PictureWithDamage
-        pictureWithDamage={pictureWithDamage}
-        handleReset={handleReset}
-      />
-    );
-  }
+  // if (pictureWithDamage) {
+  //   return (
+  //     <PictureWithDamage
+  //       pictureWithDamage={pictureWithDamage}
+  //       handleReset={handleReset}
+  //     />
+  //   );
+  // }
 
   if (imageToDisplay) {
     return (

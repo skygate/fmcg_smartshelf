@@ -30,74 +30,44 @@ class Runner:
     def __init__(self, image: PIL.Image) -> None:
         self.pil_image = image
         self.opencv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-        self.classifier = Classifier(self.pil_image)
-        self.drawer = Drawer(self.opencv_image)
-        self.detector = Detector(self.opencv_image)
-        self.mapper = ClassActivationMapper(self.pil_image)
+        self.classifier = Classifier("classifier.pth")
 
-    def run(
-        self,
-    ) -> Tuple[str, np.ndarray, Optional[Dict[str, Dict[str, Union[str, bool]]]]]:
-        states = ["creased", "defective", "good"]
-        state_classification_result = self.classifier.make_classification(
-            "classifier.pth", states
-        )
-
-        defect_types = [
-            "recess_critical",
-            "recess_non_critical",
-            "scratch_critical",
-            "scratch_non_critical",
-        ]
-        defects = None
-        image = self.drawer.image
-        if state_classification_result == "defective":
-            bboxes, defects = self.detector.get_bboxes(defect_types)
-            self.drawer.draw_bboxes(bboxes)
-            image = self.drawer.image
-        elif state_classification_result == "creased":
-            image = self.mapper.get_class_activation_map("classifier.pth")
-
-        return (
-            state_classification_result,
-            image,
-            defects,
-        )
-
+    def run(self) -> str:
+        self.classifier.update_image(self.pil_image)
+        return self.classifier.make_classification()
 
 class Classifier:
     """
     Class that makes classification of the image using trained model
     """
-
-    def __init__(self, image: PIL.Image) -> None:
+    def __init__(self, model_name: str) -> None:
         self.device: torch.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu"
         )
-        self.image = image
-        self.image_tensor = self._convert_image_to_tensor()
-
-    def _convert_image_to_tensor(self) -> torch.Tensor:
+        self.model: ResNet = torch.load(
+            os.path.join(CLASSIFIERS_PATH, model_name), map_location=self.device
+        )
+        self.model.to(self.device).eval()
+        self.class_names = ["empty", "full", "not_full_not_empty", "other"]
+        self.image_tensor: Optional[torch.Tensor] = None
+        
+    def update_image(self, image: PIL.Image) -> None:
         preprocess = self._preprocess_image()
-        image_tensor = preprocess(self.image).float()
-        return image_tensor.unsqueeze_(0)
-
+        image_tensor = preprocess(image).float()
+        self.image_tensor = image_tensor.unsqueeze_(0)
+        
     def _preprocess_image(self) -> transforms.Compose:
         compose_transforms = [
-            transforms.Resize(RESOLUTION),
+            transforms.Resize((224, 224)),
             transforms.ToTensor(),
             transforms.Normalize(np.asarray(MEAN), np.asarray(STD)),
         ]
         return transforms.Compose(compose_transforms)
-
-    def make_classification(self, model_name: str, classes: List[str]) -> str:
-        model: ResNet = torch.load(
-            os.path.join(CLASSIFIERS_PATH, model_name), map_location=self.device
-        )
-        model.to(self.device).eval()
-        fc_out = model(Variable(self.image_tensor))
+    
+    def make_classification(self) -> str:
+        fc_out = self.model(Variable(self.image_tensor))
         output = fc_out.detach().numpy()
-        return classes[output.argmax()]
+        return self.class_names[output.argmax()]
 
 
 class Detector:
