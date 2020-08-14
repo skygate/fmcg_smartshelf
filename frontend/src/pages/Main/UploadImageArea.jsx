@@ -38,11 +38,11 @@ export const UploadImageArea = () => {
   };
 
   const getPictureWithMarkedDamages = async (damagesList) => {
-    const picture = await getPictureWithDamage({
-      filename: damagesList.filename,
-    });
-    const objectURL = URL.createObjectURL(picture);
-    return setPictureWithDamage(objectURL);
+    // const picture = await getPictureWithDamage({
+    //   filename: damagesList.filename,
+    // });
+    // const objectURL = URL.createObjectURL(picture);
+    // return setPictureWithDamage(objectURL);
   };
 
   const checkStatuses = async (damagesList) => {
