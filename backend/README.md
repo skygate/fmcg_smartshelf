@@ -62,3 +62,8 @@ where you have to POST a following json
 ```
 then an image with bouding boxes on detected defects will be returned.
 
+
+## Models
+
+The model has to be placed inside the directory `models/classifiers/`.
+E.g.: `models/classifiers/classifier.pth`
