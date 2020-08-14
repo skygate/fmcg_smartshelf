@@ -46,11 +46,11 @@ class Runner:
             box = self.boxes[idx]
             
             frame_config = {
-                "left_upper": {
+                "leftUpper": {
                     "x": box[0],
                     "y": box[1]
                 },
-                "right_lower": {
+                "rightLower": {
                     "x": box[2],
                     "y": box[3]
                 },
