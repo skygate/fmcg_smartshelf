@@ -126,13 +126,7 @@ export const ResultStatus = styled.div`
 export const ResultImage = styled.img`
   display: block;
   background-size: cover;
-  margin: 1rem 0;
-  ${ImagesSize}
-
-  ${mediaQueries.xxl} {
-    padding: 1em 0 0;
-    margin: 1rem auto;
-  }
+  margin: 0;
 `;
 
 export const ImageWithDamage = styled.img`

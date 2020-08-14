@@ -10,11 +10,11 @@ import { ReportContext } from "../../context/ReportContext";
 function Main() {
   const { report } = React.useContext(ReportContext);
 
-  const criticalDamages =
-    report.defects && findElementsWithCondition(report.defects, true);
+  //   const criticalDamages =
+  //     report.defects && findElementsWithCondition(report.defects, true);
 
-  const noDamages =
-    report.defects && findElementsWithCondition(report.defects, false);
+  //   const noDamages =
+  //     report.defects && findElementsWithCondition(report.defects, false);
 
   return (
     <S.PageWrapper>
@@ -22,11 +22,11 @@ function Main() {
         <S.FirstColumn>
           <S.StatusWrapper>
             <S.StatusTitle>STATUS</S.StatusTitle>
-            {report.state && (
+            {/* {report.state && (
               <S.Status isGood={report.state === STATUSES.SUCCESS}>
                 {report.state}
               </S.Status>
-            )}
+            )} */}
           </S.StatusWrapper>
           <UploadImageArea />
         </S.FirstColumn>
@@ -34,9 +34,6 @@ function Main() {
           {report?.defects && (
             <S.ColumnsWrapper>
               <S.ColumnsWrapper>
-                {criticalDamages && (
-                  <S.TableStatus isCritical={true}>CRITICAL</S.TableStatus>
-                )}
                 {Object.entries(report.defects).map(
                   ([key, values]) =>
                     values.isCritical && (
@@ -48,7 +45,6 @@ function Main() {
                       </S.ListRowsWrapper>
                     )
                 )}
-                {noDamages && <S.TableStatus>CHECK</S.TableStatus>}
                 {Object.entries(report.defects).map(
                   ([key, values]) =>
                     !values.isCritical && (

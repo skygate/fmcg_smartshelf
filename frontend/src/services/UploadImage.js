@@ -2,13 +2,17 @@ import camelcaseKeys from "camelcase-keys";
 
 const url = "http://localhost:5000";
 
-export const getStatus = (picture) =>
-  fetch(`${url}/run`, {
+export const getStatus = (picture, boxes) => {
+  const body = new FormData();
+  body.append("file", picture);
+  body.append("boxes", JSON.stringify(boxes));
+  return fetch(`${url}/run`, {
     method: "POST",
-    body: picture,
+    body,
   })
     .then((res) => res.json())
     .then((res) => camelcaseKeys(res, { deep: true }));
+};
 
 // export const getPictureWithDamage = (filename) =>
 //   fetch(`${url}/get_detections`, {

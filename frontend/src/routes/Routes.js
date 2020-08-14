@@ -17,25 +17,23 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export const Routes = () => (
-  <>
-    <ReportContextProvider>
-      <GlobalStyle />
-      <BrowserRouter>
-        <Navigation />
-        <Switch>
-          <Route exact path={"/"}>
-            <Main />
-          </Route>
+  <ReportContextProvider>
+    <GlobalStyle />
+    <BrowserRouter>
+      <Navigation />
+      <Switch>
+        <Route exact path={"/"}>
+          <Main />
+        </Route>
 
-          <Route exact path={"/statistics"}>
-            <Statistics />
-          </Route>
+        <Route exact path={"/statistics"}>
+          <Statistics />
+        </Route>
 
-          <Route>
-            <ErrorPage />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-    </ReportContextProvider>
-  </>
+        <Route>
+          <ErrorPage />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  </ReportContextProvider>
 );

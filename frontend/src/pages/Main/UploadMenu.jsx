@@ -4,6 +4,7 @@ import { UploadOutlined } from "@ant-design/icons";
 
 import { WebCamera } from "./WebCamera";
 import * as S from "../../components/MainPage";
+
 import { getBase64 } from "../../helpers/FileToBase64";
 
 export const UploadMenu = ({
