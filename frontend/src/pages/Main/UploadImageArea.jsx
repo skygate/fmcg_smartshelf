@@ -37,24 +37,11 @@ export const UploadImageArea = () => {
     setReport(initialState);
   };
 
-  const activateGif = () => {
-    setShouldHideGif(true);
-    setTimeout(() => {
-      setShouldHideGif(false);
-    }, 2000);
-  };
-
-  const checkStatuses = async (damagesList) => {
-    setReport(damagesList);
-    if (damagesList.state === STATUSES.SUCCESS) {
-      return;
-    }
-  };
-
   const handleDetection = async (imageToDiagnoze) => {
-    activateGif();
+    setShouldHideGif(true);
     const damagesList = await getStatus(imageToDiagnoze, boxes);
-    checkStatuses(damagesList);
+    setReport(damagesList);
+    setShouldHideGif(false);
   };
 
   return imageToDisplay ? (

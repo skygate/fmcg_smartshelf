@@ -16,26 +16,9 @@ export const Loader = ({
         <S.GifWrapper src={"loader.gif"} isActive={!shouldHideGif} />
       </S.LoaderWrapper>
     ) : (
-      <div style={{ display: "flex", flex: "1 1 auto" }}>
+      <div className="flex-full">
         <Canvas
-          objects={[
-            {
-              type: "strokeRectangle",
-              color: "red",
-              x: 0,
-              y: 0,
-              width: 100,
-              height: 100,
-            },
-            {
-              type: "strokeRectangle",
-              color: "red",
-              x: 100,
-              y: 0,
-              width: 100,
-              height: 100,
-            },
-          ]}
+          objects={parseDetectionResultsForCanvas(report.results)}
           imageSrc={imageToDisplay}
         />
       </div>
@@ -48,3 +31,20 @@ export const Loader = ({
     </S.ButtonsWrapper>
   </S.ColumnsWrapper>
 );
+
+function parseDetectionResultsForCanvas(results) {
+  return results.map(({ leftUpper, rightLower, result }) => ({
+    type: "strokeRectangle",
+    x: leftUpper.x,
+    y: leftUpper.y,
+    width: rightLower.x - leftUpper.x,
+    height: rightLower.y - leftUpper.y,
+    color:
+      {
+        empty: "red",
+        full: "green",
+        not_full_not_empty: "orange",
+        other: "violet",
+      }[result] || "black",
+  }));
+}
