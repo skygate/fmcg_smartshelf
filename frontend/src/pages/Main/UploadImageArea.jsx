@@ -1,7 +1,7 @@
 import React from "react";
 
 import { UploadMenu } from "./UploadMenu";
-import { getStatus, getHistory } from "../../services/UploadImage";
+import { getStatus, getHistory, getHistoryByBoxId } from "../../services/UploadImage";
 import { Loader } from "./Loader";
 import { ReportContext } from "../../context/ReportContext";
 import { initialState } from "../../context/initialState";
