@@ -9,6 +9,8 @@ sys.path.append('/Users/skygate/Projects/shelf-analytics')
 
 from backend.db.db import History
 
+from backend.scripts.get_history_box_response import get_history_box_response
+
 from PIL import Image
 from flask import request, jsonify, Blueprint, send_from_directory
 
@@ -67,34 +69,16 @@ def run():
 def get_history_of_all_boxes():
     db_service = DatabaseService()
     history = db_service.get_history()
-    
-    response = []
-    
-    for box_history in history:
-        box_history_config = {
-            'boxId': box_history.box_id,
-            'timestamp': box_history.timestamp,
-            'state': box_history.state
-        }
-        response.append(box_history_config)
-        
+    response = get_history_box_response(history)
+
     return jsonify({ 'results': response })
 
 @api.route('/history/<int:box_id>', methods=['GET'])
 def get_box_history(box_id):
     db_service = DatabaseService()
     box_history = db_service.get_history_by_id(box_id)
-    
-    response = []
-    
-    for box in box_history:
-        box_config = {
-            'boxId': box.box_id,
-            'timestamp': box.timestamp,
-            'state': box.state
-        }
-        response.append(box_config)
-        
+    response = get_history_box_response(box_history)
+
     return jsonify({ 'results': response })
     
 # @api.route('/get_detections', methods=['POST'])
