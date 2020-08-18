@@ -10,3 +10,9 @@ class DatabaseService:
     def save_box_classification(self, timestamp, state, box):
         History(timestamp = timestamp, state = state, box = box).save()
         
+    def get_history(self):
+        return list(History.select())
+    
+    def get_history_by_id(self, box_id):
+        return list(History.select().where(History.box_id == box_id))
+        

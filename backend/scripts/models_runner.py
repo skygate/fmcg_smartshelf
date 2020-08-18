@@ -35,7 +35,7 @@ class Runner:
 
         self.boxes = boxes
 
-        self.frames = crop_frames(self.opencv_image, boxes)
+        self.frames = crop_frames(self.opencv_image, self.boxes)
 
         self.classifier = Classifier("classifier.pth")
 
