@@ -9,6 +9,7 @@ export const Loader = ({
   handleReset,
   imageToDisplay,
   imageToDetect,
+  report,
 }) => (
   <S.ColumnsWrapper>
     {shouldHideGif ? (

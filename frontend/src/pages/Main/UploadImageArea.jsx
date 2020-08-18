@@ -11,7 +11,7 @@ export const UploadImageArea = () => {
   const [imageToDetect, setImageToDetect] = React.useState(null);
   const [imageToDisplay, setImageToDisplay] = React.useState(null);
   const [isWebCameraActive, setIsWebCameraActive] = React.useState(false);
-  const { setReport } = React.useContext(ReportContext);
+  const { setReport, report } = React.useContext(ReportContext);
 
   const handleReset = () => {
     setImageToDisplay(null);
@@ -34,6 +34,7 @@ export const UploadImageArea = () => {
       handleDetection={handleDetection}
       imageToDisplay={imageToDisplay}
       imageToDetect={imageToDetect}
+      report={report}
     />
   ) : (
     <UploadMenu
