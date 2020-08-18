@@ -4,6 +4,7 @@ def get_history_box_response(history):
     for box_history in history:
         box_history_config = {
             'boxId': box_history.box_id,
+            'productName': box_history.productName,
             'timestamp': box_history.timestamp,
             'state': box_history.state
         }
