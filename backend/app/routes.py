@@ -1,11 +1,21 @@
 import os
 
 import cv2
+
+from peewee import *
+
+import sys
+sys.path.append('/Users/skygate/Projects/shelf-analytics')
+
+from backend.db.db import History
+
 from PIL import Image
 from flask import request, jsonify, Blueprint, send_from_directory
 
 from config import FILE_KEY, UPLOAD_FOLDER, FILENAME_KEY
 from scripts.models_runner import Runner
+
+from backend.services.database_service import DatabaseService
 
 api = Blueprint("api", __name__)
 
@@ -18,12 +28,10 @@ def healthchecker():
 @api.route("/run", methods=["POST"])
 def run():
     file = request.files.get(FILE_KEY)
-    # boxes = request.json["boxes"]
-    boxes = [
-            (884, 613, 948, 745), (944, 613, 999, 745), (999, 613, 1055, 745), (1053, 613, 1114, 745),
-            (890, 749, 954, 879), (946, 749, 1005, 879), (1002, 749, 1061, 879), (1056, 749, 1114, 879),
-            (894, 880, 960, 1052), (949, 880, 1015, 1052), (1008, 880, 1071, 1052), (1064, 880, 1114, 1052),
-        ]
+    timestamp = request.form["timestamp"]
+    
+    db_service = DatabaseService()
+    boxes = db_service.get_boxes()
 
     if not file:
         return jsonify({"status": "File can't be empty."}), 400
@@ -35,10 +43,35 @@ def run():
     
     runner = Runner(image, boxes)
     result = runner.run()
+    
+    to_send = []
+    
+    for (box, classification_result) in result:
+        db_service.save_box_classification(timestamp, classification_result, box)
 
-    return jsonify({"results": result})
+        frame_config = {
+            "boxId": box.id,
+            "x": box.x,
+            "y": box.y,
+            "width": box.width,
+            "height": box.height,
+            "result": classification_result,
+            "productName": box.product_name
+        }
+        
+        to_send.append(frame_config)
 
 
+    return jsonify({"results": to_send})
+
+@api.route("/history", methods=["GET"])
+def get_history_of_all_boxes():
+    print('request: ', request)
+
+@api.route("/history/:box_id", methods=["POST"])
+def get_box_history():
+    print('request: ', request)
+    
 # @api.route("/get_detections", methods=["POST"])
 # def get_detections():
 #     filename = request.json.get(FILENAME_KEY)

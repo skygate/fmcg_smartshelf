@@ -9,3 +9,4 @@ venv/
 *.cfg
 *.weights
 *.pyc
+*.db

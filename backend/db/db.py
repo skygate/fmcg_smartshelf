@@ -1,6 +1,15 @@
 from peewee import *
 
+import sys
+sys.path.append('/Users/skygate/Projects/shelf-analytics')
+
+from backend.scripts.get_project_root import get_project_root
+
 db = SqliteDatabase('shelf-analytics.db')
+
+root = get_project_root()
+
+print('root: ', root)
 
 class BaseModel(Model):
     class Meta:

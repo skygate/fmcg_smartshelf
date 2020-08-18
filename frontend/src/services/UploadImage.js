@@ -2,9 +2,10 @@ import camelcaseKeys from "camelcase-keys";
 
 const url = "http://localhost:5000";
 
-export const getStatus = (picture) => {
+export const getStatus = (picture, timestamp) => {
   const body = new FormData();
   body.append("file", picture);
+  body.append("timestamp", timestamp)
   return fetch(`${url}/run`, {
     method: "POST",
     body,

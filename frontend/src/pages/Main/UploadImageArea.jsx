@@ -22,7 +22,7 @@ export const UploadImageArea = () => {
 
   const handleDetection = async (imageToDiagnoze) => {
     setShouldHideGif(true);
-    const damagesList = await getStatus(imageToDiagnoze);
+    const damagesList = await getStatus(imageToDiagnoze, new Date().getTime());
     setReport(damagesList);
     setShouldHideGif(false);
   };
