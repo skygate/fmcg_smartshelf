@@ -28,6 +28,9 @@ const Canvas = ({ objects, imageSrc }) => {
             ctx.strokeRect(x, y, width, height);
             break;
           }
+
+          default:
+            break;
         }
       });
     };

@@ -62,8 +62,6 @@ function Statictics() {
     }
   };
 
-  const hadleClick = setCategoryIndex;
-
   const dateOutsideRange = (min, max) => (date) => date < min || date > max;
 
   const invalidDate = dateOutsideRange(
@@ -90,7 +88,7 @@ function Statictics() {
       {categories.map((item, index) => (
         <S.CategoryButton
           key={item}
-          onClick={() => hadleClick(index)}
+          onClick={() => setCategoryIndex(index)}
           active={categoryIndex === index}
         >
           {item}
@@ -101,7 +99,7 @@ function Statictics() {
           <RangePicker
             picker="month"
             disabledDate={invalidDate}
-            onChange={(timeRange) => handleChange(timeRange)}
+            onChange={handleChange}
           />
         </S.DateSelectorWrapper>
         <S.StyledChart>{renderChart()}</S.StyledChart>
