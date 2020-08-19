@@ -23,6 +23,7 @@ from config import (
 
 from .crop_frames import crop_frames
 
+
 class Runner:
     """
     Class that runs the system sequence steps
@@ -34,7 +35,8 @@ class Runner:
 
         self.boxes = boxes
 
-        self.frames = crop_frames(self.opencv_image, boxes)
+        self.frames = crop_frames(self.opencv_image, self.boxes)
+
         self.classifier = Classifier("classifier.pth")
 
     def run(self) -> str:
@@ -45,21 +47,8 @@ class Runner:
             self.classifier.update_image(img)
             box = self.boxes[idx]
             
-            frame_config = {
-                "leftUpper": {
-                    "x": box[0],
-                    "y": box[1]
-                },
-                "rightLower": {
-                    "x": box[2],
-                    "y": box[3]
-                },
-                "result": self.classifier.make_classification()
-            }
+            frames.append((box, self.classifier.make_classification()))
             
-            frames.append(frame_config)
-            
-        print('frames: ', frames)
         return frames
 
 
@@ -78,12 +67,14 @@ class Classifier:
         self.model.to(self.device).eval()
         self.class_names = ["empty", "full", "not_full_not_empty", "other"]
         self.image_tensor: Optional[torch.Tensor] = None
+
         
     def update_image(self, image: PIL.Image) -> None:
         preprocess = self._preprocess_image()
         image_tensor = preprocess(image).float()
         self.image_tensor = image_tensor.unsqueeze_(0)
-        
+
+
     def _preprocess_image(self) -> transforms.Compose:
         compose_transforms = [
             transforms.Resize((224, 224)),
@@ -91,7 +82,8 @@ class Classifier:
             transforms.Normalize(np.asarray(MEAN), np.asarray(STD)),
         ]
         return transforms.Compose(compose_transforms)
-    
+
+
     def make_classification(self) -> str:
         fc_out = self.model(Variable(self.image_tensor))
         output = fc_out.detach().numpy()

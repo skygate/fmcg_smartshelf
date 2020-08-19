@@ -34,12 +34,12 @@ export const Loader = ({
 );
 
 function parseDetectionResultsForCanvas(results) {
-  return results.map(({ leftUpper, rightLower, result }) => ({
+  return results.map(({ x, y, width, height, result }) => ({
     type: "strokeRectangle",
-    x: leftUpper.x,
-    y: leftUpper.y,
-    width: rightLower.x - leftUpper.x,
-    height: rightLower.y - leftUpper.y,
+    x,
+    y,
+    width,
+    height,
     color:
       {
         empty: "red",

@@ -4,4 +4,4 @@ import os
 import glob
 
 def crop_frames(image, boxes):
-    return [cv2.cvtColor(np.array(image[box[1]:box[3], box[0]:box[2], :]), cv2.COLOR_BGR2RGB) for box in boxes]
+    return [cv2.cvtColor(np.array(image[box.y:(box.y+box.height), box.x:(box.x+box.width), :]), cv2.COLOR_BGR2RGB) for box in boxes]
