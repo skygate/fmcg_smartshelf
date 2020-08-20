@@ -7,7 +7,8 @@ export const defaultCategories = [
   "February",
   "March",
 ];
-export const categories = ["Main", "Scratch", "Recess"];
+export const categories = ["Wszystko", "Mleko Mlekovita 3%", "Woda Żywiec"];
+
 export const months = [
   "January",
   "February",
@@ -118,21 +119,32 @@ export const highchartsDefaultOptions = {
   title: {
     text: "",
   },
+  yAxis: { title: { text: "Sloty" } },
   xAxis: {
-    categories: defaultCategories,
+    categories: [
+      date(2020, 8, 19, 9),
+      date(2020, 8, 19, 11),
+      date(2020, 8, 19, 13),
+      date(2020, 8, 19, 15),
+      date(2020, 8, 19, 17),
+      date(2020, 8, 19, 19),
+    ],
   },
   series: [
     {
       type: "column",
-      name: "Critical faults",
-      color: "#E42900",
-      data: defaultCategories.map((item) => defaultCriticalData[item]),
+      name: "Pełne",
+      data: [8, 7, 5, 3, 2, 0],
     },
     {
       type: "column",
-      name: "Non-critical faults",
-      color: "#BCCDDE",
-      data: defaultCategories.map((item) => defaultNoCriticalData[item]),
+      name: "Półpełne",
+      data: [0, 1, 2, 2, 3, 4],
+    },
+    {
+      type: "column",
+      name: "Puste",
+      data: [0, 0, 1, 3, 3, 4],
     },
   ],
   legend: {
@@ -152,3 +164,7 @@ export const STATUSES = {
   CREASED: "creased",
   FAILURE: "defective",
 };
+
+function date(year, month, day, hour = 0, minute = 0, second = 0) {
+  return new Date(year, month - 1, day, hour, minute, second);
+}

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { UploadMenu } from "./UploadMenu";
-import { getStatus, getHistory, getHistoryByBoxId } from "../../services/UploadImage";
+import { getStatus, getHistory } from "../../services/UploadImage";
 import { Loader } from "./Loader";
 import { ReportContext } from "../../context/ReportContext";
 import { initialState } from "../../context/initialState";
@@ -23,11 +23,6 @@ export const UploadImageArea = () => {
   const handleDetection = async (imageToDiagnoze) => {
     setShouldHideGif(true);
     const damagesList = await getStatus(imageToDiagnoze, new Date().getTime());
-    
-    const history = await getHistory();
-    const historyByBoxId = await getHistoryByBoxId(3)
-    console.log({ history, historyByBoxId });
-
     setReport(damagesList);
     setShouldHideGif(false);
   };

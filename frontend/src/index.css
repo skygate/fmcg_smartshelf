@@ -12,7 +12,11 @@ code {
     monospace;
 }
 
-.flex-full {
-  display: flex;
-  flex: 1 1 auto;
+.alerts {
+  margin: 1em 0;
+  font-size: 2em;
+}
+
+.critical {
+  color: red;
 }

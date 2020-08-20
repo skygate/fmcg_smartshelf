@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { eachMonthOfInterval } from "date-fns";
@@ -11,6 +11,7 @@ import {
   highchartsDefaultOptions,
   dataByCategory,
 } from "../constants";
+import { getHistory } from "../services/UploadImage";
 
 const { RangePicker } = DatePicker;
 
@@ -25,6 +26,12 @@ function Statictics() {
   const [startDate, setStartDate] = React.useState(timeRange.startDate);
   const [endDate, setEndDate] = React.useState(timeRange.endDate);
   const [categoryIndex, setCategoryIndex] = React.useState(0);
+
+  const [history, setHistory] = useState();
+
+  useEffect(() => {
+    getHistory().then(setHistory);
+  });
 
   const formatHighchartsOptions = (highchartsOptions, monthsBetween) => {
     const categories = monthsBetween.map((item) => months[item.getMonth()]);
@@ -51,10 +58,12 @@ function Statictics() {
         end: endDate,
       });
 
-      const highchartsOptions = formatHighchartsOptions(
-        highchartsDefaultOptions,
-        monthsBetween
-      );
+      //   const highchartsOptions = formatHighchartsOptions(
+      //     highchartsDefaultOptions,
+      //     monthsBetween
+      //   );
+
+      const highchartsOptions = highchartsDefaultOptions;
 
       return (
         <HighchartsReact highcharts={Highcharts} options={highchartsOptions} />
@@ -83,7 +92,6 @@ function Statictics() {
     <>
       <S.TitleWrapper>
         <S.Title>Anomalies detected</S.Title>
-        <S.GenerateRaportWrapper>Generate raport</S.GenerateRaportWrapper>
       </S.TitleWrapper>
       {categories.map((item, index) => (
         <S.CategoryButton
@@ -95,13 +103,13 @@ function Statictics() {
         </S.CategoryButton>
       ))}
       <S.ChartWrapper>
-        <S.DateSelectorWrapper>
+        {/* <S.DateSelectorWrapper>
           <RangePicker
             picker="month"
             disabledDate={invalidDate}
             onChange={handleChange}
           />
-        </S.DateSelectorWrapper>
+        </S.DateSelectorWrapper> */}
         <S.StyledChart>{renderChart()}</S.StyledChart>
       </S.ChartWrapper>
     </>
