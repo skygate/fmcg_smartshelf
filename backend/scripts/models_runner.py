@@ -10,7 +10,7 @@ from PIL import Image
 from gradcam import GradCAMpp
 from gradcam.utils import visualize_cam
 from torch.autograd import Variable
-from torchvision.models import ResNet 
+from torchvision.models import ResNet
 
 from config import (
     CLASSIFIERS_PATH,
@@ -41,14 +41,14 @@ class Runner:
 
     def run(self) -> str:
         frames = []
-        
+
         for idx, frame in enumerate(self.frames):
             img = Image.fromarray(frame.astype('uint8'), 'RGB')
             self.classifier.update_image(img)
             box = self.boxes[idx]
-            
+
             frames.append((box, self.classifier.make_classification()))
-            
+
         return frames
 
 
@@ -56,7 +56,7 @@ class Classifier:
     """
     Class that makes classification of the image using trained model
     """
-    
+
     def __init__(self, model_name: str) -> None:
         self.device: torch.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -68,12 +68,10 @@ class Classifier:
         self.class_names = ["empty", "full", "not_full_not_empty", "other"]
         self.image_tensor: Optional[torch.Tensor] = None
 
-        
     def update_image(self, image: PIL.Image) -> None:
         preprocess = self._preprocess_image()
         image_tensor = preprocess(image).float()
         self.image_tensor = image_tensor.unsqueeze_(0)
-
 
     def _preprocess_image(self) -> transforms.Compose:
         compose_transforms = [
@@ -82,7 +80,6 @@ class Classifier:
             transforms.Normalize(np.asarray(MEAN), np.asarray(STD)),
         ]
         return transforms.Compose(compose_transforms)
-
 
     def make_classification(self) -> str:
         fc_out = self.model(Variable(self.image_tensor))
@@ -134,7 +131,8 @@ class ClassActivationMapper:
         self.image_normalized = self._normalize_image()
 
     def _convert_image_to_tensor(self) -> torch.Tensor:
-        compose_transforms = [transforms.Resize(RESOLUTION), transforms.ToTensor()]
+        compose_transforms = [transforms.Resize(
+            RESOLUTION), transforms.ToTensor()]
         return transforms.Compose(compose_transforms)(self.image)
 
     def _normalize_image(self) -> torch.Tensor:
