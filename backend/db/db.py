@@ -21,11 +21,12 @@ class Box(BaseModel):
 
 class History(BaseModel):
     box = ForeignKeyField(Box, backref="history")
-    timestamp = DateTimeField()
+    timestamp = DateTimeField(index=True)
     state = CharField()
 
     class Meta:
         table_name = "history"
+
 
 db.connect()
 db.create_tables([Box, History])

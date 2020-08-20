@@ -1,3 +1,8 @@
+from scripts.models_runner import Runner
+from config import FILE_KEY, UPLOAD_FOLDER, FILENAME_KEY
+from flask import request, jsonify, Blueprint, send_from_directory
+from PIL import Image
+
 import os
 
 import cv2
@@ -11,16 +16,8 @@ import sys
 sys.path.append('/Users/skygate/Projects/shelf-analytics')
 
 from backend.db.db import History
-
-from backend.scripts.get_history_box_response import get_history_box_response
-
-from PIL import Image
-from flask import request, jsonify, Blueprint, send_from_directory
-
-from config import FILE_KEY, UPLOAD_FOLDER, FILENAME_KEY
-from scripts.models_runner import Runner
-
 from backend.services.database_service import DatabaseService
+from backend.scripts.get_history_box_response import get_history_box_response
 
 api = Blueprint('api', __name__)
 
@@ -52,8 +49,9 @@ def run():
     response = []
 
     for (box, classification_result) in result:
-        db_service.save_box_classification(timestamp, classification_result, box)
-        
+        db_service.save_box_classification(
+            timestamp, classification_result, box)
+
         frame_config = {
             'boxId': box.id,
             'x': box.x,
@@ -66,7 +64,7 @@ def run():
 
         response.append(frame_config)
 
-    return jsonify({ 'results': response })
+    return jsonify({'results': response})
 
 
 @api.route('/history', methods=['GET'])
@@ -80,14 +78,14 @@ def get_history_of_all_boxes():
         history = db_service.get_history_by_date(start_date, end_date)
     elif (not start_date and end_date):
         history = db_service.get_history_by_date(0, end_date)
-    elif (start_date):        
+    elif (start_date):
         history = db_service.get_history_by_date(start_date, timestamp_now_ms)
     else:
         history = db_service.get_history()
 
     response = get_history_box_response(history)
 
-    return jsonify({ 'results': response })
+    return jsonify({'results': response})
 
 
 @api.route('/history/<int:box_id>', methods=['GET'])
@@ -96,4 +94,11 @@ def get_box_history(box_id):
     box_history = db_service.get_history_by_id(box_id)
     response = get_history_box_response(box_history)
 
-    return jsonify({ 'results': response })
+    return jsonify({'results': response})
+
+
+@api.route('/state/current/<int:box_id>', methods=['GET'])
+def get_box_current_state(box_id):
+    db_service = DatabaseService()
+    box_current_state = db_service.get_box_current_state(box_id)
+    return jsonify({'boxCurrentState': box_current_state})
