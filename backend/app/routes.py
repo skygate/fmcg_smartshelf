@@ -86,7 +86,7 @@ def get_history_of_all_boxes():
         history = db_service.get_history()
 
     response = get_history_box_response(history)
-
+    
     return jsonify({ 'results': response })
 
 
@@ -97,3 +97,10 @@ def get_box_history(box_id):
     response = get_history_box_response(box_history)
 
     return jsonify({ 'results': response })
+
+
+@api.route('/state/current/<int:box_id>', methods=['GET'])
+def get_box_current_state(box_id):
+    db_service = DatabaseService()
+    box_current_state = db_service.get_box_current_state(box_id)
+    return jsonify({ 'boxCurrentState': box_current_state })

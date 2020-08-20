@@ -10,7 +10,7 @@ def populate_database():
         (890, 749, 64, 130), (946, 749, 59, 130), (1002, 749, 59, 130), (1056, 749, 59, 130),
         (894, 880, 66, 172), (949, 880, 66, 172), (1008, 880, 63, 172), (1064, 880, 50, 172),
     ]
-    
+
     prod_names = [
         "Mleko Wypasione 3,2%", "Mleko UHT 3,2%", "Mleko UHT 3,2%", "Mleko UHT 3,2%",
         "Mleko Wypasione 3,2%", "Mleko Wypasione 3,2%", "Mleko UHT 1,5%", "Mleko UHT 1,5%",
@@ -18,7 +18,7 @@ def populate_database():
     ]
 
     for idx, box in enumerate(boxes):
-        Box(x = box[0], y = box[1], width = box[2], height = box[3], product_name = prod_names[idx]).save()
+        Box(x = box[0], y = box[1], width = box[2], height = box[3], product_name = prod_names[idx], current_state = None, sold_count = 0).save()
 
 
 populate_database()
