@@ -4,7 +4,7 @@ import cv2
 
 from peewee import *
 
-import calendar;
+import calendar
 import time
 
 import sys
