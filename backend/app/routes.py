@@ -4,6 +4,9 @@ import cv2
 
 from peewee import *
 
+import calendar
+import time
+
 import sys
 sys.path.append('/Users/skygate/Projects/shelf-analytics')
 
@@ -31,7 +34,7 @@ def healthchecker():
 def run():
     file = request.files.get(FILE_KEY)
     timestamp = request.form['timestamp']
-    
+
     db_service = DatabaseService()
     boxes = db_service.get_boxes()
 
@@ -42,12 +45,12 @@ def run():
         image = Image.open(file)
     except IOError:
         return jsonify({'status': 'File must be an image!'}), 400
-    
+
     runner = Runner(image, boxes)
     result = runner.run()
-    
+
     response = []
-    
+
     for (box, classification_result) in result:
         db_service.save_box_classification(timestamp, classification_result, box)
         
@@ -60,18 +63,32 @@ def run():
             'result': classification_result,
             'productName': box.product_name
         }
-        
+
         response.append(frame_config)
 
     return jsonify({ 'results': response })
 
+
 @api.route('/history', methods=['GET'])
 def get_history_of_all_boxes():
+    start_date = request.args.get('startDate')
+    end_date = request.args.get('endDate')
+    timestamp_now_ms = calendar.timegm(time.gmtime()) * 1000
     db_service = DatabaseService()
-    history = db_service.get_history()
+
+    if (start_date and end_date):
+        history = db_service.get_history_by_date(start_date, end_date)
+    elif (not start_date and end_date):
+        history = db_service.get_history_by_date(0, end_date)
+    elif (start_date):        
+        history = db_service.get_history_by_date(start_date, timestamp_now_ms)
+    else:
+        history = db_service.get_history()
+
     response = get_history_box_response(history)
 
     return jsonify({ 'results': response })
+
 
 @api.route('/history/<int:box_id>', methods=['GET'])
 def get_box_history(box_id):
@@ -80,11 +97,3 @@ def get_box_history(box_id):
     response = get_history_box_response(box_history)
 
     return jsonify({ 'results': response })
-    
-# @api.route('/get_detections', methods=['POST'])
-# def get_detections():
-#     filename = request.json.get(FILENAME_KEY)
-#     if not filename:
-#         return jsonify({'status': 'File name can't be empty'})
-
-#     return send_from_directory(UPLOAD_FOLDER, filename)
