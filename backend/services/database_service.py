@@ -1,6 +1,7 @@
-from backend.db.db import Box, History
 import sys
 sys.path.append('/Users/skygate/Projects/shelf-analytics')
+
+from backend.db.db import Box, History
 
 
 class DatabaseService:

@@ -1,10 +1,8 @@
-from backend.services.database_service import DatabaseService
 from scripts.models_runner import Runner
 from config import FILE_KEY, UPLOAD_FOLDER, FILENAME_KEY
 from flask import request, jsonify, Blueprint, send_from_directory
 from PIL import Image
-from backend.scripts.get_history_box_response import get_history_box_response
-from backend.db.db import History
+
 import os
 
 import cv2
@@ -17,6 +15,9 @@ import time
 import sys
 sys.path.append('/Users/skygate/Projects/shelf-analytics')
 
+from backend.db.db import History
+from backend.services.database_service import DatabaseService
+from backend.scripts.get_history_box_response import get_history_box_response
 
 api = Blueprint('api', __name__)
 

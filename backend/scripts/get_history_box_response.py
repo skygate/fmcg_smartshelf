@@ -1,7 +1,7 @@
-from backend.db.db import Box
 import sys
 sys.path.append('/Users/skygate/Projects/shelf-analytics')
 
+from backend.db.db import Box
 
 def get_history_box_response(history):
     response = []
