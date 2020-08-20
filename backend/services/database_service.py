@@ -22,3 +22,4 @@ class DatabaseService:
 
     def get_history_by_id(self, box_id):
         return list(History.select().where(History.box_id == box_id))
+
