@@ -35,6 +35,8 @@ const Canvas = ({ objects, imageSrc }) => {
         }
       });
     };
+
+    return () => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }, [objects, imageSrc]);
 
   return <canvas width="800" height="600" ref={canvasRef}></canvas>;
