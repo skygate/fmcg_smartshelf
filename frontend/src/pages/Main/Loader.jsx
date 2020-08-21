@@ -1,7 +1,9 @@
 import React from "react";
 
+import * as R from "ramda";
 import * as S from "../../components/MainPage";
 import Canvas from "../../components/Canvas";
+import Results from "./Results";
 
 export const Loader = ({
   shouldHideGif,
@@ -24,23 +26,7 @@ export const Loader = ({
             objects={parseDetectionResultsForCanvas(report.results)}
             imageSrc={imageToDisplay}
           />
-          {
-            <ul className="alerts">
-              {Object.keys(missing).map((productName) => {
-                const numberOfEmptySlots = missing[productName];
-                const isCritical = numberOfEmptySlots > 1;
-                const description = `${productName}: ${numberOfEmptySlots}${
-                  isCritical ? " (Needs immediate refill)" : ""
-                }`;
-                const classes = isCritical ? "critical" : "";
-                return (
-                  <li className={classes} key={description}>
-                    {description}
-                  </li>
-                );
-              })}
-            </ul>
-          }
+          {report.results.length > 0 ? <Results missing={missing} /> : null}
         </div>
       )}
       <S.ButtonsWrapper>
@@ -71,17 +57,8 @@ function parseDetectionResultsForCanvas(results) {
 }
 
 function countMissing(results) {
-  return count(results.filter(isEmpty).map(({ productName }) => productName));
-}
-
-function isEmpty(detectionResult) {
-  return detectionResult.result === "empty";
-}
-
-function count(list) {
-  const result = {};
-  list.forEach((element) => {
-    result[element] = (result[element] || 0) + 1;
-  });
-  return result;
+  return R.pipe(
+    R.groupBy(({ result }) => result),
+    R.map(R.countBy(({ productName }) => productName))
+  )(results);
 }

@@ -13,15 +13,20 @@ code {
 }
 
 .alerts {
-  border: 1px solid green;
+  border: 2px solid black;
   padding: 2em;
   margin: 0 1em;
   font-size: 1em;
   box-sizing: border-box;
+  font-weight: bold;
 }
 
 .critical {
   color: red;
+}
+
+.semi-critical {
+  color: orange;
 }
 
 .flex {
