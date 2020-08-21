@@ -11,6 +11,7 @@
     "date-fns": "^2.14.0",
     "highcharts": "^8.1.2",
     "highcharts-react-official": "^3.0.0",
+    "momentjs": "^2.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",

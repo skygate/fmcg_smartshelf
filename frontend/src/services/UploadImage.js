@@ -11,7 +11,7 @@ export const getStatus = (picture, timestamp) => {
   });
 };
 
-export const getHistory = (startDate) => get("/history", { startDate });
+export const getHistory = (startDate) => get("/history", startDate ? { startDate } : {});
 
 export const getHistoryByBoxId = (boxId) => get(`/history/${boxId}`);
 

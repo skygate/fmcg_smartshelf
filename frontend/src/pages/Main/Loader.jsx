@@ -19,7 +19,7 @@ export const Loader = ({
           <S.GifWrapper src={"loader.gif"} isActive={!shouldHideGif} />
         </S.LoaderWrapper>
       ) : (
-        <div>
+        <div className="flex">
           <Canvas
             objects={parseDetectionResultsForCanvas(report.results)}
             imageSrc={imageToDisplay}

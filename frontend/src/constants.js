@@ -7,7 +7,13 @@ export const defaultCategories = [
   "February",
   "March",
 ];
-export const categories = ["Wszystko", "Mleko Mlekovita 3%", "Woda Żywiec"];
+
+export const legend = {
+  full: { labelText: "Full", color: "green" },
+  not_full_not_empty: { labelText: "Not Full", color: "orange" },
+  empty: { labelText: "Empty", color: "red" },
+  other: { labelText: "Not Recognized", color: "violet" },
+};
 
 export const months = [
   "January",
@@ -119,33 +125,36 @@ export const highchartsDefaultOptions = {
   title: {
     text: "",
   },
-  yAxis: { title: { text: "Sloty" } },
+  yAxis: { title: { text: "Count" } },
   xAxis: {
     categories: [
-      date(2020, 8, 19, 9),
-      date(2020, 8, 19, 11),
-      date(2020, 8, 19, 13),
-      date(2020, 8, 19, 15),
-      date(2020, 8, 19, 17),
-      date(2020, 8, 19, 19),
+      // date(2020, 8, 19, 9),
+      // date(2020, 8, 19, 11),
+      // date(2020, 8, 19, 13),
+      // date(2020, 8, 19, 15),
+      // date(2020, 8, 19, 17),
+      // date(2020, 8, 19, 19),
     ],
   },
   series: [
-    {
-      type: "column",
-      name: "Pełne",
-      data: [8, 7, 5, 3, 2, 0],
-    },
-    {
-      type: "column",
-      name: "Półpełne",
-      data: [0, 1, 2, 2, 3, 4],
-    },
-    {
-      type: "column",
-      name: "Puste",
-      data: [0, 0, 1, 3, 3, 4],
-    },
+    // {
+    //   type: "column",
+    //   // name: "Pełne",
+    //   // data: [],
+    //   // data: [8, 7, 5, 3, 2, 0],
+    // },
+    // {
+    //   type: "column",
+    //   // name: "Półpełne",
+    //   // data: [],
+    //   // data: [0, 1, 2, 2, 3, 4],
+    // },
+    // {
+    //   type: "column",
+    //   // name: "Puste",
+    //   // data: [],
+    //   // data: [0, 0, 1, 3, 3, 4],
+    // },
   ],
   legend: {
     align: "right",
@@ -158,13 +167,3 @@ export const highchartsDefaultOptions = {
     reversed: true,
   },
 };
-
-export const STATUSES = {
-  SUCCESS: "good",
-  CREASED: "creased",
-  FAILURE: "defective",
-};
-
-function date(year, month, day, hour = 0, minute = 0, second = 0) {
-  return new Date(year, month - 1, day, hour, minute, second);
-}

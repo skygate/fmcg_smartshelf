@@ -82,16 +82,21 @@ export const GenerateRaportWrapper = styled.button`
   }
 `;
 
+export const CategoriesWreapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
 export const CategoryButton = styled.button`
-  width: 10rem;
-  height: 2.5rem;
   background-color: ${({ active }) => (active ? colors.tab : colors.menu)};
   border-radius: 5px;
   border: none;
-  font-size: ${fontSize.large};
+  font-size: ${fontSize.base};
   color: ${colors.white};
   margin-left: 1.3rem;
   margin-top: 0.5rem;
+  padding: 5px 15px;
+  cursor: pointer;
 `;
 
 export const TitleWrapper = styled(RowsWrapper)`
