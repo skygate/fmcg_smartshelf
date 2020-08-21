@@ -80,47 +80,27 @@ function Statictics() {
   const getStateNames = (data) => R.uniq(data.map((val) => val[0][0]));
 
   const stateNames = getStateNames(data);
+  const fillEmptyDataWithNulls = (data) =>
+    data.map((item) => (item ? item[1] : null));
 
-  const getSeriesData = () => {
-    // const transposedData = R.transpose(data);
+  const getDataByProductName = (data, productName) =>
+    data.map((data) => data.find((item) => item[0] === productName));
 
-    const results = stateNames.reduce((result, name) => {
-      let config;
-      const arr = [];
+  const getConfigData = (name) => {
+    const filteredData = data.filter((data) => data.length > 0);
+    const dataByProductName = getDataByProductName(filteredData, name);
 
-      data.forEach((d) => {
-        arr.push(
-          d.map((item) => {
-            item.forEach((e) => {
-              if (e !== name) {
-                return;
-              }
-            });
-
-            return item;
-          })
-        );
-
-        config = {
-          ...result,
-          [name]: arr
-            .filter((b) => b.length > 0)
-            .map((data) => data.find((item) => item[0] === name))
-            .map((data) => {
-              if (!data) {
-                return null;
-              }
-
-              return data[1];
-            }),
-        };
-      });
-
-      return config;
-    }, {});
-
-    return results;
+    return fillEmptyDataWithNulls(dataByProductName);
   };
+
+  const getSeriesData = () =>
+    stateNames.reduce(
+      (result, name) => ({
+        ...result,
+        [name]: getConfigData(name),
+      }),
+      {}
+    );
 
   const formatHighchartsOptions = (highchartsOptions, history, productName) => {
     const categories = getCategories(history);

@@ -15,11 +15,9 @@ const Canvas = ({ objects, imageSrc }) => {
     const image = new Image();
     image.src = imageSrc;
     image.onload = () => {
-      //   canvas.width = image.width;
-      //   canvas.height = image.height;
       const scale = canvas.width / image.width;
       canvas.height = image.height * scale;
-      console.log(scale);
+
       ctx.drawImage(image, 0, 0, image.width * scale, image.height * scale);
 
       objects.forEach((object) => {
