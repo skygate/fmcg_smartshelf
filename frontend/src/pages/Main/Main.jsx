@@ -20,14 +20,14 @@ function Main() {
     <S.PageWrapper>
       <S.MiddleSectionWrapper>
         <S.FirstColumn>
-          <S.StatusWrapper>
+          {/* <S.StatusWrapper>
             <S.StatusTitle>STATUS</S.StatusTitle>
-            {/* {report.state && (
+            {report.state && (
               <S.Status isGood={report.state === STATUSES.SUCCESS}>
                 {report.state}
               </S.Status>
-            )} */}
-          </S.StatusWrapper>
+            )}
+          </S.StatusWrapper> */}
           <UploadImageArea />
         </S.FirstColumn>
         <S.SecondColumn>
