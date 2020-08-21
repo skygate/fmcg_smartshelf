@@ -12,7 +12,23 @@ code {
     monospace;
 }
 
-.flex-full {
+.alerts {
+  border: 2px solid black;
+  padding: 2em;
+  margin: 0 1em;
+  font-size: 1em;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.critical {
+  color: red;
+}
+
+.semi-critical {
+  color: orange;
+}
+
+.flex {
   display: flex;
-  flex: 1 1 auto;
 }

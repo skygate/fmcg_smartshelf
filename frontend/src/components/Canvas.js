@@ -15,17 +15,18 @@ const Canvas = ({ objects, imageSrc }) => {
     const image = new Image();
     image.src = imageSrc;
     image.onload = () => {
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
+      const scale = canvas.width / image.width;
+      canvas.height = image.height * scale;
+
+      ctx.drawImage(image, 0, 0, image.width * scale, image.height * scale);
 
       objects.forEach((object) => {
         switch (object.type) {
           case "strokeRectangle": {
             const { color, x, y, width, height } = object;
             ctx.strokeStyle = color;
-            ctx.lineWidth = 4;
-            ctx.strokeRect(x, y, width, height);
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x * scale, y * scale, width * scale, height * scale);
             break;
           }
 
@@ -34,9 +35,11 @@ const Canvas = ({ objects, imageSrc }) => {
         }
       });
     };
+
+    return () => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }, [objects, imageSrc]);
 
-  return <canvas ref={canvasRef}></canvas>;
+  return <canvas width="800" height="600" ref={canvasRef}></canvas>;
 };
 
 export default Canvas;

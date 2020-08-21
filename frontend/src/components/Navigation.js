@@ -53,7 +53,7 @@ export const NavLinkWrapper = styled(NavLink)`
 `;
 
 const data = [
-  { src: "MenuIcon.svg", path: "/", title: "Menu" },
+  { src: "MenuIcon.svg", path: "/", title: "Upload" },
   { src: "StatisticsIcon.svg", path: "/statistics", title: "Statistics" },
 ];
 
