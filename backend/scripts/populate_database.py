@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/Users/skygate/Projects/shelf-analytics')
+sys.path.append('../..')
 
 from backend.db.db import Box
 
