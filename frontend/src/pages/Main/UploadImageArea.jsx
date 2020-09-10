@@ -1,7 +1,8 @@
 import React from "react";
+import { message } from "antd";
 
 import { UploadMenu } from "./UploadMenu";
-import { getStatus, getHistory } from "../../services/UploadImage";
+import { getStatus } from "../../services/UploadImage";
 import { Loader } from "./Loader";
 import { ReportContext } from "../../context/ReportContext";
 import { initialState } from "../../context/initialState";
@@ -22,9 +23,14 @@ export const UploadImageArea = () => {
 
   const handleDetection = async (imageToDiagnoze) => {
     setShouldHideGif(true);
-    const damagesList = await getStatus(imageToDiagnoze, new Date().getTime());
-    setReport(damagesList);
-    setShouldHideGif(false);
+    getStatus(imageToDiagnoze, new Date().getTime())
+      .then(setReport)
+      .catch(() => {
+        message.error("Sorry, something went wrong :( Try again");
+      })
+      .then(() => {
+        setShouldHideGif(false);
+      });
   };
 
   return imageToDisplay ? (

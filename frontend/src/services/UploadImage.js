@@ -1,6 +1,6 @@
 import camelcaseKeys from "camelcase-keys";
 
-const baseUrl = "http://localhost:5000";
+const baseUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 export const getStatus = (picture, timestamp) => {
   const body = new FormData();
@@ -11,7 +11,8 @@ export const getStatus = (picture, timestamp) => {
   });
 };
 
-export const getHistory = (startDate) => get("/history", startDate ? { startDate } : {});
+export const getHistory = (startDate) =>
+  get("/history", startDate ? { startDate } : {});
 
 export const getHistoryByBoxId = (boxId) => get(`/history/${boxId}`);
 
@@ -29,9 +30,12 @@ function post(endpoint, options) {
 }
 
 function formatUrl(endpoint, queryParams = {}) {
-  return `${baseUrl}${endpoint}?${Object.keys(queryParams)
-    .map((key) => `${key}=${queryParams[key]}`)
-    .join("&")}`;
+  const paramsPairs = Object.entries(queryParams);
+  const formatParam = ([key, value]) => `${key}=${value}`;
+  const paramsString =
+    paramsPairs.length > 0 ? `?${paramsPairs.map(formatParam).join("&")}` : "";
+
+  return `${baseUrl}${endpoint}${paramsString}`;
 }
 
 function transformResponse(res) {

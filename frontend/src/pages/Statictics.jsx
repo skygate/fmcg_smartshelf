@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { eachMonthOfInterval } from "date-fns";
-import { DatePicker } from "antd";
+import { DatePicker, message } from "antd";
 import * as R from "ramda";
 import * as S from "../components/Statistics";
 import moment from "moment";
@@ -39,7 +38,11 @@ function Statictics() {
   };
 
   useEffect(() => {
-    getHistory(midnightBefore(new Date()).getTime()).then(setHistory);
+    getHistory(midnightBefore(new Date()).getTime())
+      .then(setHistory)
+      .catch(() => {
+        message.error("Sorry, something went wrong :( Try again");
+      });
   }, []);
 
   const getUniqueProductNames = (history) =>
